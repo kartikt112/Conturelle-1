@@ -26,6 +26,42 @@
   transform: scale(1.04);
 }
 
+/* ══ Wishlist Heart ══ */
+.wishlistHeart {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  width: 34px;
+  height: 34px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(4px);
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+  color: var(--muted);
+  z-index: 3;
+  opacity: 0;
+  transition: opacity 0.3s, color 0.3s, background 0.3s, transform 0.2s;
+}
+
+.imageWrap:hover .wishlistHeart,
+.wishlistHeartActive {
+  opacity: 1;
+}
+
+.wishlistHeartActive {
+  color: var(--sale-red);
+  opacity: 1;
+}
+
+.wishlistHeart:hover {
+  transform: scale(1.1);
+  background: rgba(255, 255, 255, 0.95);
+}
+
 /* ══ Badge ══ */
 .badge {
   position: absolute;

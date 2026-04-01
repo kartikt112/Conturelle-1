@@ -1,5 +1,6 @@
 import { Cormorant_Garamond, Jost } from 'next/font/google';
 import { CartProvider } from '@/context/CartContext';
+import { WishlistProvider } from '@/context/WishlistContext';
 import AnnouncementBar from '@/components/AnnouncementBar';
 import Nav from '@/components/Nav';
 import Footer from '@/components/Footer';
@@ -31,11 +32,13 @@ export default function RootLayout({ children }) {
     <html lang="en" className={`${cormorant.variable} ${jost.variable}`}>
       <body>
         <CartProvider>
+        <WishlistProvider>
           <AnnouncementBar />
           <Nav />
           <CartDrawer />
           <main>{children}</main>
           <Footer />
+        </WishlistProvider>
         </CartProvider>
       </body>
     </html>

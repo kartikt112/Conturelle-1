@@ -3,6 +3,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import Link from 'next/link';
 import { useCart } from '@/context/CartContext';
+import { useWishlist } from '@/context/WishlistContext';
 import styles from './Nav.module.css';
 
 const navLinks = [
@@ -14,6 +15,7 @@ const navLinks = [
 
 export default function Nav() {
   const { cartCount, openCart } = useCart();
+  const { wishlistCount } = useWishlist();
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
   const [announcementVisible, setAnnouncementVisible] = useState(true);
@@ -82,6 +84,14 @@ export default function Nav() {
                 <circle cx="11" cy="11" r="7" />
                 <path d="M16.5 16.5L21 21" strokeLinecap="round" />
               </svg>
+            </Link>
+            <Link href="/wishlist" className={styles.wishlistBtn} aria-label="Wishlist">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+                <path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z" strokeLinecap="round" strokeLinejoin="round" />
+              </svg>
+              {wishlistCount > 0 && (
+                <span className={styles.wishlistBadge}>{wishlistCount}</span>
+              )}
             </Link>
             <button
               className={styles.cartBtn}

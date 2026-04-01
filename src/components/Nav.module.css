@@ -100,6 +100,37 @@
   color: var(--gold);
 }
 
+.wishlistBtn {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--espresso);
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.wishlistBtn:hover {
+  color: var(--gold);
+}
+
+.wishlistBadge {
+  position: absolute;
+  top: -6px;
+  right: -8px;
+  width: 18px;
+  height: 18px;
+  background: var(--sale-red);
+  color: #fff;
+  font-family: var(--sans);
+  font-size: 10px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+}
+
 .cartBtn {
   position: relative;
   display: flex;
