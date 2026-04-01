@@ -1,0 +1,2647 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Conturelle — Premium Lingerie Since 1885</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600&family=Jost:wght@200;300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --espresso: #2C2220;
+    --deep: #1A1412;
+    --warm-white: #FAF7F4;
+    --cream: #F3EDE6;
+    --gold: #C4956A;
+    --gold-hover: #B38559;
+    --champagne: #E8D5C4;
+    --taupe: #6B5B52;
+    --muted: #9B8B82;
+    --border: #E5DDD5;
+    --sale-red: #B5484A;
+    --star-gold: #C4956A;
+    --serif: 'Cormorant Garamond', Georgia, serif;
+    --sans: 'Jost', 'Helvetica Neue', sans-serif;
+    --nav-height: 73px;
+    --announcement-height: 36px;
+    --section-pad: clamp(80px, 10vw, 140px);
+    --reveal-duration: 0.8s;
+    --reveal-ease: cubic-bezier(0.23, 1, 0.32, 1);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: var(--sans);
+    background: var(--warm-white);
+    color: var(--espresso);
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+  }
+
+  /* ═══════════════════════════════════════════════
+     1. ANNOUNCEMENT BAR
+     ═══════════════════════════════════════════════ */
+  .announcement-bar {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 200;
+    background: var(--espresso);
+    border-bottom: 1px solid rgba(196,149,106,0.15);
+    padding: 10px 48px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: var(--announcement-height);
+  }
+
+  .announcement-bar.is-hidden { display: none; }
+
+  .announcement-ticker {
+    position: relative;
+    display: flex;
+    align-items: center;
+    min-height: 16px;
+  }
+
+  .announcement-msg {
+    font-family: var(--sans);
+    font-size: 10px;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--gold);
+    display: none;
+    white-space: nowrap;
+  }
+
+  .announcement-msg.active { display: inline; }
+
+  .announcement-close {
+    position: absolute;
+    right: 16px;
+    background: none;
+    border: none;
+    color: rgba(250,247,244,0.3);
+    font-size: 16px;
+    cursor: pointer;
+    line-height: 1;
+    transition: color 0.3s ease;
+  }
+
+  .announcement-close:hover { color: rgba(250,247,244,0.6); }
+
+  /* ═══════════════════════════════════════════════
+     2. STICKY NAV
+     ═══════════════════════════════════════════════ */
+  .site-nav {
+    position: fixed;
+    top: var(--announcement-height);
+    left: 0; right: 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 24px 3.5%;
+    background: rgba(250, 247, 244, 0.6);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-bottom: 1px solid transparent;
+    z-index: 100;
+    transition: padding 0.4s ease, background 0.4s ease, border-color 0.4s ease, top 0.3s ease;
+  }
+
+  .site-nav.no-announcement { top: 0; }
+
+  .site-nav.scrolled {
+    padding-top: 16px;
+    padding-bottom: 16px;
+    background: rgba(250, 247, 244, 0.95);
+    border-bottom-color: var(--border);
+  }
+
+  .site-nav__logo {
+    font-family: var(--serif);
+    font-size: 24px;
+    font-weight: 600;
+    color: var(--espresso);
+    text-decoration: none;
+    letter-spacing: 0.13em;
+    text-transform: uppercase;
+    transition: opacity 0.3s ease;
+  }
+
+  .site-nav__logo:hover { opacity: 0.7; }
+
+  .site-nav__center {
+    display: flex;
+    gap: 28px;
+    list-style: none;
+  }
+
+  .site-nav__center a {
+    font-size: 11px;
+    font-weight: 400;
+    color: var(--taupe);
+    text-decoration: none;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    transition: color 0.3s ease;
+    position: relative;
+  }
+
+  .site-nav__center a::after {
+    content: '';
+    position: absolute;
+    bottom: -3px; left: 0;
+    width: 0; height: 1px;
+    background: var(--gold);
+    transition: width 0.35s ease;
+  }
+
+  .site-nav__center a:hover { color: var(--espresso); }
+  .site-nav__center a:hover::after { width: 100%; }
+
+  .site-nav__right {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+  }
+
+  .site-nav__right a {
+    font-size: 11px;
+    font-weight: 400;
+    color: var(--taupe);
+    text-decoration: none;
+    letter-spacing: 0.06em;
+    transition: color 0.3s ease;
+  }
+
+  .site-nav__right a:hover { color: var(--espresso); }
+
+  .site-nav__cart {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .site-nav__cart svg {
+    stroke: var(--taupe);
+    transition: stroke 0.3s ease;
+  }
+
+  .site-nav__cart:hover svg { stroke: var(--espresso); }
+
+  .site-nav__cart-count {
+    position: absolute;
+    top: -6px; right: -10px;
+    width: 15px; height: 15px;
+    background: var(--gold);
+    color: #FFFFFF;
+    font-size: 8px;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    line-height: 1;
+  }
+
+  /* Hamburger */
+  .site-nav__hamburger {
+    display: none;
+    flex-direction: column;
+    justify-content: center;
+    gap: 5px;
+    width: 28px;
+    height: 28px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+  }
+
+  .site-nav__hamburger span {
+    display: block;
+    width: 100%;
+    height: 1.5px;
+    background: var(--espresso);
+    transition: transform 0.3s ease, opacity 0.3s ease;
+    transform-origin: center;
+  }
+
+  .site-nav__hamburger.is-open span:nth-child(1) { transform: translateY(6.5px) rotate(45deg); }
+  .site-nav__hamburger.is-open span:nth-child(2) { opacity: 0; }
+  .site-nav__hamburger.is-open span:nth-child(3) { transform: translateY(-6.5px) rotate(-45deg); }
+
+  /* Mobile Menu Overlay */
+  .mobile-menu {
+    position: fixed;
+    top: 0; right: 0;
+    width: 100%;
+    height: 100vh;
+    background: var(--cream);
+    z-index: 99;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    transform: translateX(100%);
+    transition: transform 0.4s var(--reveal-ease);
+  }
+
+  .mobile-menu.is-open { transform: translateX(0); }
+
+  .mobile-menu a {
+    font-family: var(--serif);
+    font-size: 28px;
+    font-weight: 400;
+    color: var(--espresso);
+    text-decoration: none;
+    padding: 16px 32px;
+    transition: color 0.3s ease;
+  }
+
+  .mobile-menu a:hover { color: var(--gold); }
+
+  /* ═══════════════════════════════════════════════
+     3. HERO SECTION
+     ═══════════════════════════════════════════════ */
+  .hero {
+    position: relative;
+    width: 100%;
+    height: 100vh;
+    min-height: 720px;
+    padding-top: calc(var(--nav-height) + var(--announcement-height));
+    display: grid;
+    grid-template-columns: 1fr 1.15fr 0.85fr;
+    grid-template-rows: 1fr auto;
+    background: var(--warm-white);
+  }
+
+  .hero__story {
+    grid-column: 1;
+    grid-row: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 48px 5% 48px 4%;
+    border-right: 1px solid var(--border);
+    position: relative;
+  }
+
+  .hero__story::before {
+    content: 'C';
+    position: absolute;
+    top: 10%;
+    left: -8%;
+    font-family: var(--serif);
+    font-size: 400px;
+    font-weight: 300;
+    color: var(--champagne);
+    opacity: 0.25;
+    pointer-events: none;
+    line-height: 1;
+    z-index: 0;
+  }
+
+  .hero__story-inner {
+    position: relative;
+    z-index: 2;
+  }
+
+  .hero__seit {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 32px;
+    opacity: 0;
+    animation: fadeUp 0.8s var(--reveal-ease) 0.2s forwards;
+  }
+
+  .hero__seit-line { width: 24px; height: 1px; background: var(--gold); }
+
+  .hero__seit-text {
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--gold);
+  }
+
+  .hero__headline {
+    font-family: var(--serif);
+    font-size: clamp(36px, 3.8vw, 58px);
+    font-weight: 400;
+    line-height: 1.06;
+    color: var(--espresso);
+    letter-spacing: -0.015em;
+    margin-bottom: 20px;
+    opacity: 0;
+    animation: fadeUp 0.9s var(--reveal-ease) 0.35s forwards;
+  }
+
+  .hero__headline em {
+    font-style: italic;
+    font-weight: 300;
+    color: var(--gold);
+  }
+
+  .hero__body {
+    font-size: 15px;
+    font-weight: 300;
+    color: var(--taupe);
+    line-height: 1.7;
+    max-width: 360px;
+    margin-bottom: 36px;
+    opacity: 0;
+    animation: fadeUp 0.8s var(--reveal-ease) 0.5s forwards;
+  }
+
+  .hero__cta-area {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    opacity: 0;
+    animation: fadeUp 0.8s var(--reveal-ease) 0.65s forwards;
+  }
+
+  .cta-primary {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    width: 100%;
+    max-width: 320px;
+    height: 56px;
+    background: var(--gold);
+    color: #FFFFFF;
+    font-family: var(--sans);
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    text-decoration: none;
+    border: none;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+    transition: background 0.35s ease, transform 0.35s ease;
+  }
+
+  .cta-primary::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
+    transform: translateX(-100%);
+    transition: transform 0.6s ease;
+  }
+
+  .cta-primary:hover { background: var(--gold-hover); transform: translateY(-2px); }
+  .cta-primary:hover::before { transform: translateX(100%); }
+
+  .cta-primary .arrow { font-size: 16px; transition: transform 0.3s ease; }
+  .cta-primary:hover .arrow { transform: translateX(4px); }
+
+  .cta-secondary {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    width: 100%;
+    max-width: 320px;
+    height: 48px;
+    background: transparent;
+    color: var(--espresso);
+    font-family: var(--sans);
+    font-size: 11px;
+    font-weight: 400;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    text-decoration: none;
+    border: 1px solid var(--border);
+    transition: all 0.35s ease;
+  }
+
+  .cta-secondary:hover {
+    border-color: var(--espresso);
+    background: var(--espresso);
+    color: #FFFFFF;
+  }
+
+  .hero__cta-secondary-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--muted);
+    text-decoration: none;
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 3px;
+    transition: color 0.3s ease, border-color 0.3s ease;
+    opacity: 0;
+    animation: fadeUp 0.6s var(--reveal-ease) 0.8s forwards;
+  }
+
+  .hero__cta-secondary-link:hover {
+    color: var(--gold);
+    border-color: var(--gold);
+  }
+
+  .hero__micro-trust {
+    display: flex;
+    gap: 20px;
+    margin-top: 28px;
+    opacity: 0;
+    animation: fadeUp 0.6s ease 0.9s forwards;
+  }
+
+  .hero__micro-trust-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 10px;
+    font-weight: 400;
+    color: var(--muted);
+    letter-spacing: 0.03em;
+  }
+
+  .hero__micro-trust-icon { font-size: 12px; color: var(--gold); }
+
+  /* Hero center image */
+  .hero__image {
+    grid-column: 2;
+    grid-row: 1;
+    position: relative;
+    overflow: hidden;
+    opacity: 0;
+    animation: imageReveal 1.1s var(--reveal-ease) 0.4s forwards;
+  }
+
+  @keyframes imageReveal {
+    from { opacity: 0; clip-path: inset(5% 0 5% 0); }
+    to { opacity: 1; clip-path: inset(0 0 0 0); }
+  }
+
+  .hero__image img {
+    width: 100%; height: 100%;
+    object-fit: cover;
+    object-position: center top;
+    transition: transform 6s ease;
+  }
+
+  .hero:hover .hero__image img { transform: scale(1.03); }
+
+  .hero__image-tag {
+    position: absolute;
+    bottom: 24px; left: 24px;
+    background: rgba(255,255,255,0.92);
+    backdrop-filter: blur(10px);
+    padding: 10px 18px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    z-index: 5;
+    opacity: 0;
+    animation: fadeUp 0.6s ease 1.3s forwards;
+  }
+
+  .hero__image-tag-dot {
+    width: 6px; height: 6px;
+    background: var(--gold);
+    border-radius: 50%;
+    animation: pulse 2s ease-in-out infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.5; transform: scale(0.8); }
+  }
+
+  .hero__image-tag-text {
+    font-size: 10px; font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--espresso);
+  }
+
+  .hero__image-tag-price { font-size: 11px; color: var(--taupe); margin-left: 4px; }
+
+  /* Hero sidebar */
+  .hero__sidebar {
+    grid-column: 3; grid-row: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 40px 3.5% 40px 3%;
+    border-left: 1px solid var(--border);
+    overflow-y: auto;
+  }
+
+  .hero__sidebar-section {
+    opacity: 0;
+    animation: fadeUp 0.7s ease forwards;
+  }
+
+  .hero__sidebar-section:nth-child(1) { animation-delay: 0.6s; }
+  .hero__sidebar-section:nth-child(2) { animation-delay: 0.8s; }
+  .hero__sidebar-section:nth-child(3) { animation-delay: 1s; }
+
+  .hero__sidebar-label {
+    font-size: 9px; font-weight: 600;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 16px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .hero__collections { list-style: none; display: flex; flex-direction: column; }
+  .hero__collections li { border-bottom: 1px solid var(--border); }
+  .hero__collections li:last-child { border-bottom: none; }
+
+  .hero__collections a {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 0;
+    text-decoration: none;
+    transition: padding-left 0.3s var(--reveal-ease);
+  }
+
+  .hero__collections a:hover { padding-left: 8px; }
+
+  .hero__coll-name {
+    font-family: var(--serif);
+    font-size: 17px; font-weight: 500;
+    color: var(--espresso);
+    transition: color 0.3s ease;
+  }
+
+  .hero__collections a:hover .hero__coll-name { color: var(--gold); }
+
+  .hero__coll-type {
+    font-size: 9px; font-weight: 400;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--muted);
+    transition: color 0.3s ease;
+  }
+
+  .hero__collections a:hover .hero__coll-type { color: var(--gold); }
+
+  .hero__quote { padding-top: 4px; }
+
+  .hero__quote-stars { color: var(--gold); font-size: 12px; letter-spacing: 2px; margin-bottom: 10px; }
+
+  .hero__quote-text {
+    font-family: var(--serif);
+    font-size: 15px; font-style: italic; font-weight: 400;
+    color: var(--taupe);
+    line-height: 1.55;
+    margin-bottom: 10px;
+  }
+
+  .hero__quote-author { font-size: 10px; font-weight: 500; color: var(--muted); letter-spacing: 0.06em; }
+  .hero__quote-verified { font-size: 9px; font-weight: 400; color: var(--gold); letter-spacing: 0.06em; margin-top: 2px; }
+
+  .hero__sizes { display: flex; flex-wrap: wrap; gap: 6px; }
+
+  .hero__size-chip {
+    padding: 5px 10px;
+    background: var(--cream);
+    font-size: 10px; font-weight: 500;
+    color: var(--taupe);
+    letter-spacing: 0.04em;
+    transition: all 0.2s ease;
+    cursor: pointer;
+  }
+
+  .hero__size-chip:hover { background: var(--espresso); color: #FFFFFF; }
+
+  /* Hero bottom */
+  .hero__bottom {
+    grid-column: 1 / -1; grid-row: 2;
+    border-top: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 14px 3%;
+    gap: 28px;
+    opacity: 0;
+    animation: fadeUp 0.5s ease 1.4s forwards;
+  }
+
+  .hero__bottom-item {
+    display: flex; align-items: center; gap: 8px;
+    font-size: 10px; font-weight: 400;
+    letter-spacing: 0.06em;
+    color: var(--muted);
+  }
+
+  .hero__bottom-icon { font-size: 13px; color: var(--gold); }
+  .hero__bottom-sep { width: 1px; height: 14px; background: var(--border); }
+
+  /* ═══════════════════════════════════════════════
+     SHARED SECTION UTILITIES
+     ═══════════════════════════════════════════════ */
+  .section-label {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 20px;
+  }
+
+  .section-label__line { width: 24px; height: 1px; background: var(--gold); }
+
+  .section-label__text {
+    font-size: 10px; font-weight: 600;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--gold);
+  }
+
+  .section-heading {
+    font-family: var(--serif);
+    font-size: clamp(32px, 4vw, 52px);
+    font-weight: 400;
+    line-height: 1.1;
+    color: var(--espresso);
+    letter-spacing: -0.01em;
+  }
+
+  .section-heading em {
+    font-style: italic;
+    font-weight: 300;
+    color: var(--gold);
+  }
+
+  /* Scroll reveal */
+  .reveal {
+    opacity: 0;
+    transform: translateY(24px);
+    transition: opacity var(--reveal-duration) var(--reveal-ease),
+                transform var(--reveal-duration) var(--reveal-ease);
+  }
+
+  .reveal-left {
+    opacity: 0;
+    transform: translateX(-32px);
+    transition: opacity var(--reveal-duration) var(--reveal-ease),
+                transform var(--reveal-duration) var(--reveal-ease);
+  }
+
+  .reveal-right {
+    opacity: 0;
+    transform: translateX(32px);
+    transition: opacity var(--reveal-duration) var(--reveal-ease),
+                transform var(--reveal-duration) var(--reveal-ease);
+  }
+
+  .reveal.is-visible,
+  .reveal-left.is-visible,
+  .reveal-right.is-visible {
+    opacity: 1;
+    transform: translate(0);
+  }
+
+  .reveal-delay-1 { transition-delay: 0.1s; }
+  .reveal-delay-2 { transition-delay: 0.2s; }
+  .reveal-delay-3 { transition-delay: 0.3s; }
+  .reveal-delay-4 { transition-delay: 0.4s; }
+  .reveal-delay-5 { transition-delay: 0.5s; }
+  .reveal-delay-6 { transition-delay: 0.6s; }
+
+  /* ═══════════════════════════════════════════════
+     4. TRUST / BRAG BAR
+     ═══════════════════════════════════════════════ */
+  .brag-bar {
+    position: relative;
+    z-index: 2;
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    padding: 18px 48px;
+    background: var(--cream);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 32px;
+  }
+
+  .brag-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .brag-stars { color: var(--gold); font-size: 12px; }
+
+  .brag-text {
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--taupe);
+  }
+
+  .brag-separator {
+    color: var(--border);
+    font-size: 18px;
+  }
+
+  /* ═══════════════════════════════════════════════
+     5. CATEGORY TILES
+     ═══════════════════════════════════════════════ */
+  .categories {
+    background: var(--warm-white);
+    padding: var(--section-pad) 4% 60px;
+  }
+
+  .categories__header {
+    max-width: 1200px;
+    margin: 0 auto 40px;
+  }
+
+  .categories__grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2px;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  .category-tile {
+    position: relative;
+    aspect-ratio: 4/3;
+    overflow: hidden;
+    display: flex;
+    align-items: flex-end;
+    padding: 24px;
+    text-decoration: none;
+    cursor: pointer;
+  }
+
+  .category-tile__bg {
+    position: absolute;
+    inset: 0;
+    transition: transform 0.7s cubic-bezier(0.25,0.46,0.45,0.94);
+  }
+
+  .category-tile__bg img {
+    width: 100%; height: 100%;
+    object-fit: cover;
+  }
+
+  .category-tile:hover .category-tile__bg { transform: scale(1.04); }
+
+  .category-tile__overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top, rgba(44,34,32,0.6) 0%, rgba(44,34,32,0.1) 60%, transparent 100%);
+    z-index: 1;
+  }
+
+  .category-tile__name {
+    position: relative;
+    z-index: 2;
+    font-family: var(--serif);
+    font-size: 22px;
+    color: #FFFFFF;
+    font-weight: 400;
+  }
+
+  .category-tile__badge {
+    position: absolute;
+    top: 16px; right: 16px;
+    z-index: 2;
+    font-size: 8px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: #FFFFFF;
+    background: var(--sale-red);
+    padding: 4px 10px;
+  }
+
+  /* ═══════════════════════════════════════════════
+     6. HERITAGE SECTION
+     ═══════════════════════════════════════════════ */
+  .heritage {
+    background: var(--cream);
+    display: grid;
+    grid-template-columns: 1.1fr 0.9fr;
+    min-height: 80vh;
+  }
+
+  .heritage__image {
+    position: relative;
+    overflow: hidden;
+  }
+
+  .heritage__image img {
+    width: 100%; height: 100%;
+    object-fit: cover;
+    transform: scale(1.08);
+    will-change: transform;
+  }
+
+  .heritage__image-caption {
+    position: absolute;
+    bottom: 28px; left: 28px;
+    background: rgba(255,255,255,0.88);
+    backdrop-filter: blur(10px);
+    padding: 10px 18px;
+    font-size: 10px; font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--espresso);
+  }
+
+  .heritage__content {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 60px 6%;
+  }
+
+  .heritage__content .section-heading { margin-bottom: 24px; }
+
+  .heritage__text {
+    font-size: 15px; font-weight: 300;
+    color: var(--taupe);
+    line-height: 1.75;
+    max-width: 440px;
+    margin-bottom: 48px;
+  }
+
+  .heritage__stats {
+    display: flex;
+    gap: 40px;
+    margin-bottom: 40px;
+  }
+
+  .heritage__stat-number {
+    font-family: var(--serif);
+    font-size: 42px; font-weight: 400;
+    color: var(--gold);
+    line-height: 1;
+    margin-bottom: 6px;
+  }
+
+  .heritage__stat-label {
+    font-size: 10px; font-weight: 500;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  .heritage__link {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 12px; font-weight: 500;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--gold);
+    text-decoration: none;
+    transition: gap 0.3s ease;
+  }
+
+  .heritage__link:hover { gap: 14px; }
+
+  /* ═══════════════════════════════════════════════
+     7. BEST SELLERS SECTION
+     ═══════════════════════════════════════════════ */
+  .bestsellers {
+    background: var(--warm-white);
+    padding: var(--section-pad) 4%;
+  }
+
+  .bestsellers__header {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    max-width: 1200px;
+    margin: 0 auto 48px;
+  }
+
+  .bestsellers__header-left { max-width: 480px; }
+
+  .bestsellers__header p {
+    font-size: 15px; font-weight: 300;
+    color: var(--taupe);
+    line-height: 1.7;
+    margin-top: 12px;
+  }
+
+  .bestsellers__view-all {
+    font-size: 11px; font-weight: 500;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--gold);
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    transition: gap 0.3s ease;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+
+  .bestsellers__view-all:hover { gap: 14px; }
+
+  .bestsellers__grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 28px;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  .bestsellers__card {
+    position: relative;
+    cursor: pointer;
+  }
+
+  .bestsellers__card-img {
+    position: relative;
+    aspect-ratio: 3 / 4;
+    overflow: hidden;
+    margin-bottom: 16px;
+  }
+
+  .bestsellers__card-img img {
+    width: 100%; height: 100%;
+    object-fit: cover;
+    transition: transform 0.6s ease;
+  }
+
+  .bestsellers__card:hover .bestsellers__card-img img { transform: scale(1.04); }
+
+  /* Product badge */
+  .bestsellers__badge {
+    position: absolute;
+    top: 12px; left: 12px;
+    z-index: 3;
+    font-size: 8px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    padding: 4px 10px;
+  }
+
+  .badge-bestseller { background: var(--espresso); color: var(--gold); border: 1px solid rgba(196,149,106,0.3); }
+  .badge-new { background: var(--gold); color: #FFFFFF; }
+  .badge-sale { background: var(--sale-red); color: #FFFFFF; }
+
+  /* Quick-add overlay */
+  .bestsellers__card-quick {
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    padding: 20px;
+    background: linear-gradient(to top, rgba(44,34,32,0.65) 0%, transparent 100%);
+    display: flex;
+    justify-content: center;
+    opacity: 0;
+    transform: translateY(8px);
+    transition: opacity 0.35s ease, transform 0.35s ease;
+  }
+
+  .bestsellers__card:hover .bestsellers__card-quick { opacity: 1; transform: translateY(0); }
+
+  .bestsellers__card-quick-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    height: 40px;
+    padding: 0 24px;
+    background: rgba(255,255,255,0.95);
+    backdrop-filter: blur(8px);
+    color: var(--espresso);
+    font-family: var(--sans);
+    font-size: 10px; font-weight: 500;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    text-decoration: none;
+    border: none;
+    cursor: pointer;
+    transition: background 0.3s ease, color 0.3s ease;
+  }
+
+  .bestsellers__card-quick-btn:hover { background: var(--gold); color: #FFFFFF; }
+
+  .bestsellers__card-info { padding: 0 2px; }
+
+  .bestsellers__card-collection {
+    font-size: 10px; font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 4px;
+  }
+
+  .bestsellers__card-name {
+    font-family: var(--serif);
+    font-size: 18px; font-weight: 500;
+    color: var(--espresso);
+    margin-bottom: 8px;
+  }
+
+  .bestsellers__card-bottom {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .bestsellers__card-price { font-size: 14px; font-weight: 400; color: var(--espresso); }
+  .bestsellers__card-stars { color: var(--gold); font-size: 11px; letter-spacing: 1px; }
+
+  /* NEW: Star ratings + review count */
+  .bestsellers__card-rating {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    margin-top: 6px;
+  }
+
+  .bestsellers__card-rating .stars { color: var(--gold); font-size: 10px; }
+  .bestsellers__card-rating .review-count { font-size: 9px; color: var(--muted); }
+
+  /* NEW: Color swatches */
+  .bestsellers__card-swatches {
+    display: flex;
+    gap: 6px;
+    margin-top: 8px;
+  }
+
+  .swatch {
+    width: 14px; height: 14px;
+    border-radius: 50%;
+    border: 1px solid var(--border);
+    cursor: pointer;
+    transition: border-color 0.2s ease;
+  }
+
+  .swatch.active,
+  .swatch:hover {
+    border-color: var(--gold);
+    box-shadow: 0 0 0 2px var(--warm-white), 0 0 0 3px var(--gold);
+  }
+
+  /* NEW: Quick-add size panel */
+  .quick-add-panel {
+    background: var(--cream);
+    padding: 12px 16px;
+    border-top: 1px solid var(--border);
+    display: none;
+  }
+
+  .quick-add-panel.is-open { display: block; }
+
+  .quick-add-sizes {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    margin-bottom: 8px;
+  }
+
+  .qa-label {
+    font-size: 8px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--muted);
+    width: 36px;
+  }
+
+  .qa-size {
+    width: 32px; height: 32px;
+    background: transparent;
+    border: 1px solid var(--border);
+    color: var(--espresso);
+    font-family: var(--sans);
+    font-size: 10px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+
+  .qa-size:hover,
+  .qa-size.selected {
+    background: var(--gold);
+    color: #FFFFFF;
+    border-color: var(--gold);
+  }
+
+  .qa-add-btn {
+    width: 100%;
+    padding: 10px;
+    background: var(--espresso);
+    border: 1px solid var(--espresso);
+    color: var(--warm-white);
+    font-family: var(--sans);
+    font-size: 9px;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: background 0.3s ease;
+  }
+
+  .qa-add-btn:hover {
+    background: transparent;
+    border-color: var(--gold);
+    color: var(--gold);
+  }
+
+  /* ═══════════════════════════════════════════════
+     8. FEATURE STRIP / VALUE PROPS
+     ═══════════════════════════════════════════════ */
+  .feature-strip {
+    background: var(--cream);
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    padding: 60px 4%;
+  }
+
+  .feature-strip__grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 40px;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  .feature-strip__item {
+    padding-left: 20px;
+    border-left: 1px solid var(--gold);
+  }
+
+  .feature-strip__num {
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    color: var(--muted);
+    margin-bottom: 12px;
+  }
+
+  .feature-strip__title {
+    font-family: var(--serif);
+    font-size: 22px;
+    font-weight: 400;
+    color: var(--espresso);
+    margin-bottom: 10px;
+  }
+
+  .feature-strip__title em {
+    font-style: italic;
+    font-weight: 300;
+    color: var(--gold);
+  }
+
+  .feature-strip__text {
+    font-size: 13px;
+    font-weight: 300;
+    color: var(--taupe);
+    line-height: 1.7;
+  }
+
+  /* ═══════════════════════════════════════════════
+     9. FIT FINDER CTA
+     ═══════════════════════════════════════════════ */
+  .fit-finder {
+    background: var(--espresso);
+    padding: var(--section-pad) 4%;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .fit-finder::before {
+    content: '';
+    position: absolute;
+    top: -50%; left: 30%;
+    width: 40vw; height: 40vw;
+    background: radial-gradient(circle, rgba(196,149,106,0.08) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  .fit-finder__content {
+    position: relative;
+    z-index: 1;
+    max-width: 600px;
+    margin: 0 auto;
+  }
+
+  .fit-finder .section-label { justify-content: center; }
+  .fit-finder .section-label__text { color: var(--gold); }
+
+  .fit-finder .section-heading {
+    color: var(--warm-white);
+    margin-bottom: 20px;
+  }
+
+  .fit-finder__sub {
+    font-size: 15px;
+    font-weight: 300;
+    color: var(--champagne);
+    line-height: 1.7;
+    opacity: 0.8;
+    margin-bottom: 36px;
+  }
+
+  .fit-finder__ctas {
+    display: flex;
+    gap: 16px;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  .btn-ghost {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    height: 56px;
+    padding: 0 32px;
+    background: transparent;
+    border: 1px solid rgba(196,149,106,0.3);
+    color: var(--champagne);
+    font-family: var(--sans);
+    font-size: 11px; font-weight: 400;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    text-decoration: none;
+    transition: all 0.35s ease;
+  }
+
+  .btn-ghost:hover {
+    border-color: var(--gold);
+    color: var(--gold);
+  }
+
+  .fit-finder__testimonial {
+    margin-top: 40px;
+    font-family: var(--serif);
+    font-size: 15px;
+    font-style: italic;
+    color: rgba(232,213,196,0.4);
+    max-width: 500px;
+    margin-left: auto;
+    margin-right: auto;
+    line-height: 1.6;
+  }
+
+  /* ═══════════════════════════════════════════════
+     10. UGC / REVIEWS
+     ═══════════════════════════════════════════════ */
+  .ugc-section {
+    background: var(--warm-white);
+    padding: var(--section-pad) 4% 60px;
+  }
+
+  .ugc-section__header {
+    max-width: 1200px;
+    margin: 0 auto 40px;
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+  }
+
+  .ugc-section__meta {
+    font-size: 11px;
+    font-weight: 400;
+    color: var(--muted);
+    letter-spacing: 0.06em;
+  }
+
+  .ugc-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  .ugc-card {
+    background: var(--cream);
+    overflow: hidden;
+  }
+
+  .ugc-card__photo {
+    aspect-ratio: 1;
+    background: var(--champagne);
+    overflow: hidden;
+  }
+
+  .ugc-card__photo img {
+    width: 100%; height: 100%;
+    object-fit: cover;
+    transition: transform 0.5s ease;
+  }
+
+  .ugc-card:hover .ugc-card__photo img { transform: scale(1.04); }
+
+  .ugc-card__content { padding: 16px; }
+
+  .ugc-card__stars { color: var(--gold); font-size: 11px; letter-spacing: 1px; margin-bottom: 8px; }
+
+  .ugc-card__quote {
+    font-family: var(--serif);
+    font-size: 14px;
+    font-style: italic;
+    color: var(--taupe);
+    line-height: 1.6;
+    margin-bottom: 10px;
+  }
+
+  .ugc-card__author {
+    font-size: 9px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  /* ═══════════════════════════════════════════════
+     11. EMAIL CAPTURE
+     ═══════════════════════════════════════════════ */
+  .email-capture {
+    background: var(--cream);
+    padding: var(--section-pad) 4%;
+    text-align: center;
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .email-capture .section-label { justify-content: center; }
+
+  .email-capture__desc {
+    font-size: 15px; font-weight: 300;
+    color: var(--taupe);
+    line-height: 1.7;
+    max-width: 420px;
+    margin: 16px auto 36px;
+  }
+
+  .email-capture__form {
+    display: flex;
+    max-width: 480px;
+    margin: 0 auto;
+    gap: 0;
+  }
+
+  .email-capture__input {
+    flex: 1;
+    height: 56px;
+    padding: 0 20px;
+    background: var(--warm-white);
+    border: 1px solid var(--border);
+    border-right: none;
+    font-family: var(--sans);
+    font-size: 13px; font-weight: 300;
+    color: var(--espresso);
+    outline: none;
+    transition: border-color 0.3s ease;
+  }
+
+  .email-capture__input::placeholder { color: var(--muted); }
+  .email-capture__input:focus { border-color: var(--gold); }
+
+  .email-capture__submit {
+    height: 56px;
+    padding: 0 28px;
+    background: var(--gold);
+    color: #FFFFFF;
+    font-family: var(--sans);
+    font-size: 11px; font-weight: 500;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    border: none;
+    cursor: pointer;
+    transition: background 0.35s ease;
+    white-space: nowrap;
+  }
+
+  .email-capture__submit:hover { background: var(--gold-hover); }
+
+  .email-capture__privacy {
+    font-size: 11px; font-weight: 300;
+    color: var(--muted);
+    margin-top: 16px;
+  }
+
+  /* ═══════════════════════════════════════════════
+     12. CAMPAIGN BANNER (EDITORIAL)
+     ═══════════════════════════════════════════════ */
+  .editorial {
+    position: relative;
+    width: 100%;
+    height: 60vh;
+    min-height: 420px;
+    overflow: hidden;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+  }
+
+  .editorial__bg {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+  }
+
+  .editorial__bg img {
+    width: 100%; height: 100%;
+    object-fit: cover;
+    object-position: center 30%;
+    transform: scale(1.08);
+    will-change: transform;
+  }
+
+  .editorial__overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top, rgba(26,20,18,0.72) 0%, rgba(26,20,18,0.2) 50%, rgba(26,20,18,0.05) 100%);
+    z-index: 1;
+  }
+
+  .editorial__content {
+    position: relative;
+    z-index: 2;
+    text-align: center;
+    padding: 0 5% 60px;
+    max-width: 760px;
+  }
+
+  .editorial__line {
+    width: 32px; height: 1px;
+    background: var(--gold);
+    margin: 0 auto 24px;
+  }
+
+  .editorial__eyebrow {
+    font-size: 10px;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 16px;
+  }
+
+  .editorial__statement {
+    font-family: var(--serif);
+    font-size: clamp(28px, 4.5vw, 48px);
+    font-weight: 300;
+    font-style: italic;
+    color: #FFFFFF;
+    line-height: 1.25;
+    letter-spacing: -0.01em;
+    margin-bottom: 24px;
+  }
+
+  .editorial__statement strong {
+    font-weight: 500;
+    font-style: normal;
+    color: var(--champagne);
+  }
+
+  .editorial__sub {
+    font-size: 14px;
+    font-weight: 300;
+    color: rgba(255,255,255,0.6);
+    line-height: 1.6;
+    max-width: 480px;
+    margin: 0 auto 32px;
+  }
+
+  .editorial__ctas {
+    display: flex;
+    gap: 16px;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  .editorial__ctas .cta-primary { max-width: 240px; }
+  .editorial__ctas .btn-ghost { border-color: rgba(255,255,255,0.2); color: rgba(255,255,255,0.7); }
+  .editorial__ctas .btn-ghost:hover { border-color: var(--gold); color: var(--gold); }
+
+  /* ═══════════════════════════════════════════════
+     13. FOOTER
+     ═══════════════════════════════════════════════ */
+  .footer {
+    background: var(--espresso);
+    padding: 64px 4% 0;
+  }
+
+  .footer__grid {
+    display: grid;
+    grid-template-columns: 1.5fr 1fr 1fr 1fr;
+    gap: 40px;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding-bottom: 48px;
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+  }
+
+  .footer__brand-name {
+    font-family: var(--serif);
+    font-size: 22px; font-weight: 600;
+    color: var(--warm-white);
+    letter-spacing: 0.13em;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+
+  .footer__brand-sub {
+    font-size: 11px;
+    color: var(--gold);
+    letter-spacing: 0.1em;
+    margin-bottom: 16px;
+  }
+
+  .footer__brand-tagline {
+    font-size: 13px; font-weight: 300;
+    color: var(--champagne);
+    line-height: 1.65;
+    max-width: 260px;
+    opacity: 0.7;
+    margin-bottom: 20px;
+  }
+
+  .footer__social {
+    display: flex;
+    gap: 16px;
+  }
+
+  .footer__social a {
+    font-size: 11px;
+    color: var(--champagne);
+    text-decoration: none;
+    opacity: 0.5;
+    transition: opacity 0.3s ease;
+  }
+
+  .footer__social a:hover { opacity: 1; }
+
+  .footer__col-title {
+    font-size: 9px; font-weight: 600;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 20px;
+  }
+
+  .footer__links {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .footer__links a {
+    font-size: 13px; font-weight: 300;
+    color: var(--champagne);
+    text-decoration: none;
+    opacity: 0.6;
+    transition: opacity 0.3s ease;
+  }
+
+  .footer__links a:hover { opacity: 1; }
+
+  .footer__trust-bar {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px 0;
+    text-align: center;
+    font-size: 10px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--champagne);
+    opacity: 0.3;
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+  }
+
+  .footer__bottom {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 24px 0;
+  }
+
+  .footer__copy {
+    font-size: 11px; font-weight: 300;
+    color: var(--champagne);
+    opacity: 0.4;
+  }
+
+  .footer__legal {
+    display: flex;
+    gap: 20px;
+    list-style: none;
+  }
+
+  .footer__legal a {
+    font-size: 11px; font-weight: 300;
+    color: var(--champagne);
+    text-decoration: none;
+    opacity: 0.4;
+    transition: opacity 0.3s ease;
+  }
+
+  .footer__legal a:hover { opacity: 0.8; }
+
+  /* ═══════════════════════════════════════════════
+     ANIMATIONS
+     ═══════════════════════════════════════════════ */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(16px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ═══════════════════════════════════════════════
+     RESPONSIVE — 1100px
+     ═══════════════════════════════════════════════ */
+  @media (max-width: 1100px) {
+    .hero {
+      grid-template-columns: 1fr 1fr;
+    }
+    .hero__sidebar { display: none; }
+    .hero__story { border-right: 1px solid var(--border); }
+
+    .bestsellers__grid { grid-template-columns: repeat(2, 1fr); }
+    .heritage { grid-template-columns: 1fr 1fr; }
+    .heritage__stats { gap: 28px; }
+    .categories__grid { grid-template-columns: repeat(3, 1fr); }
+    .feature-strip__grid { grid-template-columns: repeat(2, 1fr); gap: 32px; }
+    .ugc-grid { grid-template-columns: repeat(2, 1fr); }
+  }
+
+  /* ═══════════════════════════════════════════════
+     RESPONSIVE — 768px
+     ═══════════════════════════════════════════════ */
+  @media (max-width: 768px) {
+    :root {
+      --section-pad: clamp(56px, 8vw, 80px);
+    }
+
+    /* Announcement */
+    .announcement-bar { padding: 10px 40px 10px 16px; height: auto; min-height: var(--announcement-height); }
+    .announcement-msg { font-size: 9px; letter-spacing: 0.15em; white-space: normal; text-align: center; }
+    .announcement-close { right: 10px; }
+
+    /* Nav */
+    .site-nav__center { display: none; }
+    .site-nav__hamburger { display: flex; }
+    .site-nav__logo { font-size: 20px; }
+    .site-nav { padding: 18px 5%; }
+    .site-nav.scrolled { padding-top: 14px; padding-bottom: 14px; }
+
+    /* Hero */
+    .hero {
+      grid-template-columns: 1fr;
+      grid-template-rows: 55vh auto auto;
+      height: auto;
+      min-height: auto;
+      padding-top: calc(60px + var(--announcement-height));
+    }
+    .hero__story {
+      grid-column: 1; grid-row: 2;
+      border-right: none;
+      border-top: 1px solid var(--border);
+      padding: 32px 6% 28px;
+      text-align: center;
+      align-items: center;
+    }
+    .hero__story::before { display: none; }
+    .hero__seit { justify-content: center; margin-bottom: 20px; }
+    .hero__headline { font-size: clamp(30px, 8vw, 42px); margin-bottom: 14px; }
+    .hero__body {
+      max-width: 340px;
+      margin-left: auto; margin-right: auto;
+      font-size: 14px;
+      margin-bottom: 28px;
+    }
+    .cta-primary { max-width: none; height: 52px; font-size: 11px; }
+    .cta-secondary { max-width: none; height: 44px; }
+    .hero__micro-trust { justify-content: center; flex-wrap: wrap; margin-top: 20px; }
+    .hero__image { grid-column: 1; grid-row: 1; }
+    .hero__sidebar { display: none; }
+    .hero__bottom {
+      grid-row: 3;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 10px;
+      padding: 12px 4%;
+    }
+    .hero__bottom-sep { display: none; }
+    .hero__bottom-item { font-size: 9px; }
+
+    /* Brag bar */
+    .brag-bar {
+      flex-direction: column;
+      gap: 10px;
+      padding: 14px 24px;
+    }
+    .brag-separator { display: none; }
+
+    /* Categories */
+    .categories { padding: var(--section-pad) 0 40px; }
+    .categories__header { padding: 0 5%; }
+    .categories__grid {
+      grid-template-columns: none;
+      display: flex;
+      overflow-x: auto;
+      scroll-snap-type: x mandatory;
+      gap: 2px;
+      padding: 0 5%;
+      scrollbar-width: none;
+    }
+    .categories__grid::-webkit-scrollbar { display: none; }
+    .category-tile {
+      min-width: 65vw;
+      scroll-snap-align: start;
+      aspect-ratio: 3/4;
+    }
+
+    /* Heritage */
+    .heritage { grid-template-columns: 1fr; }
+    .heritage__image { height: 45vh; }
+    .heritage__content {
+      padding: 36px 6%;
+      text-align: center;
+      align-items: center;
+    }
+    .heritage__content .section-heading { font-size: clamp(28px, 7vw, 38px); }
+    .heritage__text { max-width: 100%; font-size: 14px; margin-bottom: 36px; }
+    .heritage__stats { justify-content: center; gap: 28px; }
+    .heritage__stat-number { font-size: 36px; }
+
+    /* Best Sellers */
+    .bestsellers { padding: var(--section-pad) 5%; }
+    .bestsellers__header {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 12px;
+      margin-bottom: 32px;
+    }
+    .bestsellers__header .section-heading { font-size: clamp(28px, 7vw, 38px); }
+    .bestsellers__grid {
+      display: flex;
+      gap: 16px;
+      overflow-x: auto;
+      scroll-snap-type: x mandatory;
+      scrollbar-width: none;
+      -ms-overflow-style: none;
+      padding-bottom: 8px;
+      margin: 0 -5%;
+      padding-left: 5%;
+      padding-right: 5%;
+    }
+    .bestsellers__grid::-webkit-scrollbar { display: none; }
+    .bestsellers__card { flex: 0 0 240px; scroll-snap-align: start; }
+    .bestsellers__card-quick { opacity: 1; transform: translateY(0); }
+    .bestsellers__card-name { font-size: 16px; }
+
+    /* Feature strip */
+    .feature-strip { padding: 40px 5%; }
+    .feature-strip__grid { grid-template-columns: 1fr; gap: 28px; }
+
+    /* Fit Finder */
+    .fit-finder { padding: var(--section-pad) 6%; }
+    .fit-finder .section-heading { font-size: clamp(28px, 7vw, 38px); }
+    .fit-finder__ctas { flex-direction: column; align-items: center; }
+    .fit-finder__ctas .cta-primary { max-width: none; width: 100%; }
+    .fit-finder__ctas .btn-ghost { width: 100%; }
+
+    /* UGC */
+    .ugc-section { padding: var(--section-pad) 0 40px; }
+    .ugc-section__header { padding: 0 5%; }
+    .ugc-grid {
+      grid-template-columns: none;
+      display: flex;
+      overflow-x: auto;
+      scroll-snap-type: x mandatory;
+      gap: 12px;
+      padding: 0 5%;
+      scrollbar-width: none;
+    }
+    .ugc-grid::-webkit-scrollbar { display: none; }
+    .ugc-card { min-width: 280px; scroll-snap-align: start; }
+
+    /* Email capture */
+    .email-capture { padding: var(--section-pad) 6%; }
+    .email-capture .section-heading { font-size: clamp(26px, 7vw, 36px); }
+    .email-capture__desc { font-size: 14px; margin: 12px auto 28px; }
+    .email-capture__form { flex-direction: column; gap: 0; }
+    .email-capture__input { border-right: 1px solid var(--border); border-bottom: none; height: 50px; }
+    .email-capture__submit { height: 50px; }
+
+    /* Editorial / Campaign */
+    .editorial { height: 50vh; min-height: 360px; }
+    .editorial__content { padding-bottom: 40px; }
+    .editorial__statement { font-size: clamp(24px, 6.5vw, 36px); }
+    .editorial__ctas { flex-direction: column; align-items: center; }
+    .editorial__ctas .cta-primary { max-width: none; width: 100%; }
+    .editorial__ctas .btn-ghost { width: 100%; }
+
+    /* Footer */
+    .footer { padding: 48px 6% 0; }
+    .footer__grid { grid-template-columns: 1fr 1fr; gap: 28px; }
+    .footer__links { gap: 14px; }
+    .footer__links a { font-size: 14px; }
+    .footer__bottom { flex-direction: column; gap: 12px; text-align: center; padding: 20px 0; }
+    .footer__legal { flex-wrap: wrap; justify-content: center; }
+  }
+
+  @media (max-width: 480px) {
+    .hero { grid-template-rows: 50vh auto auto; }
+    .hero__headline { font-size: 28px; }
+    .bestsellers__card { flex: 0 0 220px; }
+    .heritage__stats { gap: 20px; }
+    .heritage__stat-number { font-size: 32px; }
+    .footer__grid { grid-template-columns: 1fr; text-align: center; }
+    .footer__brand-tagline { max-width: none; margin: 0 auto; }
+    .footer__social { justify-content: center; }
+  }
+</style>
+</head>
+<body>
+
+  <!-- ═══ 1. ANNOUNCEMENT BAR ═══ -->
+  <div class="announcement-bar" id="announcementBar">
+    <div class="announcement-ticker">
+      <span class="announcement-msg active">Free Shipping on Orders Over &euro;75</span>
+      <span class="announcement-msg">30-Day Easy Returns &mdash; No Questions Asked</span>
+      <span class="announcement-msg">Crafted in Europe Since 1885</span>
+    </div>
+    <button class="announcement-close" aria-label="Close announcement">&times;</button>
+  </div>
+
+  <!-- ═══ 2. STICKY NAV ═══ -->
+  <nav class="site-nav">
+    <a href="#" class="site-nav__logo">Conturelle</a>
+    <ul class="site-nav__center">
+      <li><a href="#bestsellers">Shop All</a></li>
+      <li><a href="#categories">Categories</a></li>
+      <li><a href="#heritage">Our Story</a></li>
+      <li><a href="#fit-finder">Fit Finder</a></li>
+    </ul>
+    <div class="site-nav__right">
+      <a href="#">Search</a>
+      <a href="#" class="site-nav__cart" aria-label="Shopping Cart">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+          <path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/>
+          <line x1="3" y1="6" x2="21" y2="6"/>
+          <path d="M16 10a4 4 0 01-8 0"/>
+        </svg>
+        <span class="site-nav__cart-count">0</span>
+      </a>
+      <button class="site-nav__hamburger" aria-label="Menu">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </div>
+  </nav>
+
+  <!-- ═══ MOBILE MENU ═══ -->
+  <div class="mobile-menu">
+    <a href="#bestsellers">Shop All</a>
+    <a href="#categories">Categories</a>
+    <a href="#heritage">Our Story</a>
+    <a href="#fit-finder">Fit Finder</a>
+    <a href="#">Search</a>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════
+       3. HERO SECTION
+       ═══════════════════════════════════════════════ -->
+  <section class="hero">
+
+    <div class="hero__story">
+      <div class="hero__story-inner">
+        <div class="hero__seit">
+          <span class="hero__seit-line"></span>
+          <span class="hero__seit-text">140 Years of German Precision</span>
+        </div>
+
+        <h1 class="hero__headline">
+          Engineered for<br>
+          the Way You <em>Move</em>
+        </h1>
+
+        <p class="hero__body">
+          80 pieces of precision engineering in every bra. Perfect fit guaranteed, made in Europe since 1885. Sizes 30&ndash;44, cups A&ndash;I.
+        </p>
+
+        <div class="hero__cta-area">
+          <a href="#bestsellers" class="cta-primary">
+            Shop the Collection <span class="arrow">&rarr;</span>
+          </a>
+          <a href="#fit-finder" class="cta-secondary">
+            Find Your Perfect Fit
+          </a>
+        </div>
+
+        <a href="#fit-finder" class="hero__cta-secondary-link">
+          Find Your Perfect Fit &rarr;
+        </a>
+
+        <div class="hero__micro-trust">
+          <span class="hero__micro-trust-item">
+            <span class="hero__micro-trust-icon">&#10003;</span> Free Exchanges
+          </span>
+          <span class="hero__micro-trust-item">
+            <span class="hero__micro-trust-icon">&#10003;</span> Free Shipping &euro;75+
+          </span>
+        </div>
+      </div>
+    </div>
+
+    <div class="hero__image">
+      <img src="images/swing-1.jpg" alt="Model wearing Conturelle Swing collection bra in blush pink">
+      <div class="hero__image-tag">
+        <span class="hero__image-tag-dot"></span>
+        <span class="hero__image-tag-text">Swing Collection</span>
+        <span class="hero__image-tag-price">from &euro;84</span>
+      </div>
+    </div>
+
+    <div class="hero__sidebar">
+      <div class="hero__sidebar-section">
+        <p class="hero__sidebar-label">Shop by Collection</p>
+        <ul class="hero__collections">
+          <li><a href="#"><span class="hero__coll-name">Pure Feeling</span><span class="hero__coll-type">T-Shirt Bra</span></a></li>
+          <li><a href="#"><span class="hero__coll-name">Mille Fleurs</span><span class="hero__coll-type">Embroidered</span></a></li>
+          <li><a href="#"><span class="hero__coll-name">Swing</span><span class="hero__coll-type">Non-Wired</span></a></li>
+          <li><a href="#"><span class="hero__coll-name">Provence</span><span class="hero__coll-type">3D Spacer</span></a></li>
+          <li><a href="#"><span class="hero__coll-name">Soft Touch</span><span class="hero__coll-type">Shaping</span></a></li>
+        </ul>
+      </div>
+
+      <div class="hero__sidebar-section">
+        <p class="hero__sidebar-label">Sizes Available</p>
+        <div class="hero__sizes">
+          <span class="hero__size-chip">30</span><span class="hero__size-chip">32</span>
+          <span class="hero__size-chip">34</span><span class="hero__size-chip">36</span>
+          <span class="hero__size-chip">38</span><span class="hero__size-chip">40</span>
+          <span class="hero__size-chip">42</span><span class="hero__size-chip">44</span>
+          <span class="hero__size-chip">A</span><span class="hero__size-chip">B</span>
+          <span class="hero__size-chip">C</span><span class="hero__size-chip">D</span>
+          <span class="hero__size-chip">E</span><span class="hero__size-chip">F</span>
+          <span class="hero__size-chip">G</span><span class="hero__size-chip">H</span>
+          <span class="hero__size-chip">I</span>
+        </div>
+      </div>
+
+      <div class="hero__sidebar-section">
+        <div class="hero__quote">
+          <p class="hero__quote-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</p>
+          <p class="hero__quote-text">&ldquo;Finally, a bra that fits perfectly and looks beautiful. The Swing is my everyday go-to now.&rdquo;</p>
+          <p class="hero__quote-author">&mdash; Sophie M., Size 75D</p>
+          <p class="hero__quote-verified">&#10003; Verified Purchase</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="hero__bottom">
+      <span class="hero__bottom-item"><span class="hero__bottom-icon">&#9830;</span> 80 Components per Bra</span>
+      <span class="hero__bottom-sep"></span>
+      <span class="hero__bottom-item"><span class="hero__bottom-icon">&#9733;</span> 140 Years German Engineering</span>
+      <span class="hero__bottom-sep"></span>
+      <span class="hero__bottom-item"><span class="hero__bottom-icon">&#9992;</span> Crafted in Europe</span>
+      <span class="hero__bottom-sep"></span>
+      <span class="hero__bottom-item"><span class="hero__bottom-icon">&#9733;</span> 4.8/5 from 2,000+ Reviews</span>
+    </div>
+
+  </section>
+
+  <!-- ═══════════════════════════════════════════════
+       4. TRUST / BRAG BAR
+       ═══════════════════════════════════════════════ -->
+  <div class="brag-bar reveal">
+    <div class="brag-item">
+      <span class="brag-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</span>
+      <span class="brag-text">Rated 4.8/5 by 2,000+ Women</span>
+    </div>
+    <span class="brag-separator">&middot;</span>
+    <div class="brag-item">
+      <span class="brag-text">Est. 1885 &mdash; 140 Years of Craft</span>
+    </div>
+    <span class="brag-separator">&middot;</span>
+    <div class="brag-item">
+      <span class="brag-text">OEKO-TEX&reg; Certified &middot; Made in Europe</span>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════
+       5. CATEGORY NAVIGATION TILES
+       ═══════════════════════════════════════════════ -->
+  <section class="categories" id="categories">
+    <div class="categories__header reveal">
+      <div class="section-label">
+        <span class="section-label__line"></span>
+        <span class="section-label__text">Shop by Style</span>
+      </div>
+      <h2 class="section-heading">Find Your <em>Perfect Style</em></h2>
+    </div>
+
+    <div class="categories__grid">
+      <a href="#" class="category-tile reveal reveal-delay-1">
+        <div class="category-tile__bg"><img src="images/provence-1.jpg" alt="Spacer Bras" loading="lazy"></div>
+        <div class="category-tile__overlay"></div>
+        <span class="category-tile__name">Spacer Bras</span>
+      </a>
+      <a href="#" class="category-tile reveal reveal-delay-2">
+        <div class="category-tile__bg"><img src="images/millefleurs-2.jpg" alt="Lace Bras" loading="lazy"></div>
+        <div class="category-tile__overlay"></div>
+        <span class="category-tile__name">Lace Bras</span>
+      </a>
+      <a href="#" class="category-tile reveal reveal-delay-3">
+        <div class="category-tile__bg"><img src="images/purefeel-2.jpg" alt="T-Shirt Bras" loading="lazy"></div>
+        <div class="category-tile__overlay"></div>
+        <span class="category-tile__name">T-Shirt Bras</span>
+      </a>
+      <a href="#" class="category-tile reveal reveal-delay-4">
+        <div class="category-tile__bg"><img src="images/softtouch-1.jpg" alt="Matching Briefs" loading="lazy"></div>
+        <div class="category-tile__overlay"></div>
+        <span class="category-tile__name">Matching Briefs</span>
+      </a>
+      <a href="#" class="category-tile reveal reveal-delay-5">
+        <div class="category-tile__bg"><img src="images/swing-3.jpg" alt="Complete Sets" loading="lazy"></div>
+        <div class="category-tile__overlay"></div>
+        <span class="category-tile__name">Complete Sets</span>
+      </a>
+      <a href="#" class="category-tile reveal reveal-delay-6">
+        <div class="category-tile__bg"><img src="images/blossom-1.jpg" alt="Sale" loading="lazy"></div>
+        <div class="category-tile__overlay"></div>
+        <span class="category-tile__name">Sale</span>
+        <span class="category-tile__badge">Up to 30% Off</span>
+      </a>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════
+       6. HERITAGE & CRAFTSMANSHIP
+       ═══════════════════════════════════════════════ -->
+  <section class="heritage" id="heritage">
+    <div class="heritage__image" data-parallax>
+      <img src="images/provence-2.jpg" alt="Conturelle craftsmanship detail" loading="lazy">
+      <span class="heritage__image-caption">EST. 1885</span>
+    </div>
+
+    <div class="heritage__content">
+      <div class="section-label reveal">
+        <span class="section-label__line"></span>
+        <span class="section-label__text">The Conturelle Difference</span>
+      </div>
+
+      <h2 class="section-heading reveal reveal-delay-1">
+        140 Years<br>in the <em>Making</em>
+      </h2>
+
+      <p class="heritage__text reveal reveal-delay-2">
+        Every Conturelle bra is assembled from up to 80 individual pieces &mdash; each one cut, sewn, and finished by skilled artisans in Europe. From the first thread of yarn to the finished product on your shoulders, we control every step. That&rsquo;s how we guarantee a fit no one else can.
+      </p>
+
+      <div class="heritage__stats reveal reveal-delay-3">
+        <div>
+          <p class="heritage__stat-number">80</p>
+          <p class="heritage__stat-label">Pieces per Bra</p>
+        </div>
+        <div>
+          <p class="heritage__stat-number">140</p>
+          <p class="heritage__stat-label">Years of Heritage</p>
+        </div>
+        <div>
+          <p class="heritage__stat-number">100%</p>
+          <p class="heritage__stat-label">European Made</p>
+        </div>
+      </div>
+
+      <a href="#" class="heritage__link reveal reveal-delay-4">
+        Discover Our Story <span class="arrow">&rarr;</span>
+      </a>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════
+       7. OUR BEST SELLERS
+       ═══════════════════════════════════════════════ -->
+  <section class="bestsellers" id="bestsellers">
+    <div class="bestsellers__header">
+      <div class="bestsellers__header-left reveal">
+        <div class="section-label">
+          <span class="section-label__line"></span>
+          <span class="section-label__text">Our Bestsellers</span>
+        </div>
+        <h2 class="section-heading">Most Loved <em>This Season</em></h2>
+        <p>The pieces our customers come back for, again and again.</p>
+      </div>
+      <a href="#" class="bestsellers__view-all reveal reveal-delay-2">View All <span class="arrow">&rarr;</span></a>
+    </div>
+
+    <div class="bestsellers__grid">
+
+      <!-- Card 1: Swing Spacer Bra -->
+      <div class="bestsellers__card reveal reveal-delay-1">
+        <div class="bestsellers__card-img">
+          <span class="bestsellers__badge badge-bestseller">Bestseller</span>
+          <img src="images/swing-2.jpg" alt="Swing Spacer Bra" loading="lazy">
+          <div class="bestsellers__card-quick">
+            <button class="bestsellers__card-quick-btn" onclick="event.stopPropagation(); toggleQuickAdd(this)">+ Quick Add</button>
+          </div>
+        </div>
+        <div class="quick-add-panel">
+          <div class="quick-add-sizes">
+            <span class="qa-label">Band:</span>
+            <button class="qa-size">70</button><button class="qa-size">75</button><button class="qa-size">80</button><button class="qa-size">85</button><button class="qa-size">90</button>
+          </div>
+          <div class="quick-add-sizes">
+            <span class="qa-label">Cup:</span>
+            <button class="qa-size">B</button><button class="qa-size">C</button><button class="qa-size">D</button><button class="qa-size">E</button>
+          </div>
+          <button class="qa-add-btn">Add to Cart</button>
+        </div>
+        <div class="bestsellers__card-info">
+          <p class="bestsellers__card-collection">Swing</p>
+          <p class="bestsellers__card-name">Swing Spacer Bra</p>
+          <div class="bestsellers__card-bottom">
+            <span class="bestsellers__card-price">&euro;89</span>
+            <span class="bestsellers__card-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</span>
+          </div>
+          <div class="bestsellers__card-rating">
+            <span class="stars">&#9733;&#9733;&#9733;&#9733;&#9733;</span>
+            <span class="review-count">(124)</span>
+          </div>
+          <div class="bestsellers__card-swatches">
+            <span class="swatch active" style="background:#D4BFB0;" title="Champagne"></span>
+            <span class="swatch" style="background:#2C2220;" title="Black"></span>
+            <span class="swatch" style="background:#C9A89A;" title="Rose"></span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card 2: Mille Fleurs Full Cup -->
+      <div class="bestsellers__card reveal reveal-delay-2">
+        <div class="bestsellers__card-img">
+          <span class="bestsellers__badge badge-new">New</span>
+          <img src="images/millefleurs-1.jpg" alt="Mille Fleurs Full Cup" loading="lazy">
+          <div class="bestsellers__card-quick">
+            <button class="bestsellers__card-quick-btn" onclick="event.stopPropagation(); toggleQuickAdd(this)">+ Quick Add</button>
+          </div>
+        </div>
+        <div class="quick-add-panel">
+          <div class="quick-add-sizes">
+            <span class="qa-label">Band:</span>
+            <button class="qa-size">70</button><button class="qa-size">75</button><button class="qa-size">80</button><button class="qa-size">85</button><button class="qa-size">90</button>
+          </div>
+          <div class="quick-add-sizes">
+            <span class="qa-label">Cup:</span>
+            <button class="qa-size">B</button><button class="qa-size">C</button><button class="qa-size">D</button><button class="qa-size">E</button><button class="qa-size">F</button>
+          </div>
+          <button class="qa-add-btn">Add to Cart</button>
+        </div>
+        <div class="bestsellers__card-info">
+          <p class="bestsellers__card-collection">Mille Fleurs</p>
+          <p class="bestsellers__card-name">Mille Fleurs Full Cup</p>
+          <div class="bestsellers__card-bottom">
+            <span class="bestsellers__card-price">&euro;94</span>
+            <span class="bestsellers__card-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</span>
+          </div>
+          <div class="bestsellers__card-rating">
+            <span class="stars">&#9733;&#9733;&#9733;&#9733;&#9733;</span>
+            <span class="review-count">(89)</span>
+          </div>
+          <div class="bestsellers__card-swatches">
+            <span class="swatch active" style="background:#F5EFE8;" title="Pearl"></span>
+            <span class="swatch" style="background:#2C2220;" title="Black"></span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card 3: Pure Feeling T-Shirt Bra -->
+      <div class="bestsellers__card reveal reveal-delay-3">
+        <div class="bestsellers__card-img">
+          <span class="bestsellers__badge badge-bestseller">Bestseller</span>
+          <img src="images/purefeel-1.jpg" alt="Pure Feeling T-Shirt Bra" loading="lazy">
+          <div class="bestsellers__card-quick">
+            <button class="bestsellers__card-quick-btn" onclick="event.stopPropagation(); toggleQuickAdd(this)">+ Quick Add</button>
+          </div>
+        </div>
+        <div class="quick-add-panel">
+          <div class="quick-add-sizes">
+            <span class="qa-label">Band:</span>
+            <button class="qa-size">70</button><button class="qa-size">75</button><button class="qa-size">80</button><button class="qa-size">85</button><button class="qa-size">90</button>
+          </div>
+          <div class="quick-add-sizes">
+            <span class="qa-label">Cup:</span>
+            <button class="qa-size">B</button><button class="qa-size">C</button><button class="qa-size">D</button><button class="qa-size">E</button>
+          </div>
+          <button class="qa-add-btn">Add to Cart</button>
+        </div>
+        <div class="bestsellers__card-info">
+          <p class="bestsellers__card-collection">Pure Feeling</p>
+          <p class="bestsellers__card-name">Pure Feeling T-Shirt Bra</p>
+          <div class="bestsellers__card-bottom">
+            <span class="bestsellers__card-price">&euro;79</span>
+            <span class="bestsellers__card-stars">&#9733;&#9733;&#9733;&#9733;&#9734;</span>
+          </div>
+          <div class="bestsellers__card-rating">
+            <span class="stars">&#9733;&#9733;&#9733;&#9733;&#9734;</span>
+            <span class="review-count">(156)</span>
+          </div>
+          <div class="bestsellers__card-swatches">
+            <span class="swatch active" style="background:#E8D5C4;" title="Nude"></span>
+            <span class="swatch" style="background:#2C2220;" title="Black"></span>
+            <span class="swatch" style="background:#FFFFFF; border-color:#ccc;" title="White"></span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card 4: Provence 3D Spacer -->
+      <div class="bestsellers__card reveal reveal-delay-4">
+        <div class="bestsellers__card-img">
+          <img src="images/provence-1.jpg" alt="Provence 3D Spacer" loading="lazy">
+          <div class="bestsellers__card-quick">
+            <button class="bestsellers__card-quick-btn" onclick="event.stopPropagation(); toggleQuickAdd(this)">+ Quick Add</button>
+          </div>
+        </div>
+        <div class="quick-add-panel">
+          <div class="quick-add-sizes">
+            <span class="qa-label">Band:</span>
+            <button class="qa-size">70</button><button class="qa-size">75</button><button class="qa-size">80</button><button class="qa-size">85</button><button class="qa-size">90</button>
+          </div>
+          <div class="quick-add-sizes">
+            <span class="qa-label">Cup:</span>
+            <button class="qa-size">B</button><button class="qa-size">C</button><button class="qa-size">D</button><button class="qa-size">E</button>
+          </div>
+          <button class="qa-add-btn">Add to Cart</button>
+        </div>
+        <div class="bestsellers__card-info">
+          <p class="bestsellers__card-collection">Provence</p>
+          <p class="bestsellers__card-name">Provence 3D Spacer</p>
+          <div class="bestsellers__card-bottom">
+            <span class="bestsellers__card-price">&euro;84</span>
+            <span class="bestsellers__card-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</span>
+          </div>
+          <div class="bestsellers__card-rating">
+            <span class="stars">&#9733;&#9733;&#9733;&#9733;&#9733;</span>
+            <span class="review-count">(98)</span>
+          </div>
+          <div class="bestsellers__card-swatches">
+            <span class="swatch active" style="background:#C9A89A;" title="Rose"></span>
+            <span class="swatch" style="background:#2C2220;" title="Black"></span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════
+       8. FEATURE STRIP / VALUE PROPS
+       ═══════════════════════════════════════════════ -->
+  <div class="feature-strip">
+    <div class="feature-strip__grid">
+      <div class="feature-strip__item reveal reveal-delay-1">
+        <p class="feature-strip__num">01 /</p>
+        <p class="feature-strip__title">European <em>Craft</em></p>
+        <p class="feature-strip__text">Every bra assembled from up to 80 individual pieces by skilled European artisans. 140 years of perfecting the art of fit.</p>
+      </div>
+      <div class="feature-strip__item reveal reveal-delay-2">
+        <p class="feature-strip__num">02 /</p>
+        <p class="feature-strip__title">Perfect <em>Fit</em></p>
+        <p class="feature-strip__text">Our Fit Finder quiz matches your measurements to your ideal size. Sizes EU 70&ndash;100, cups B through G. No more guessing.</p>
+      </div>
+      <div class="feature-strip__item reveal reveal-delay-3">
+        <p class="feature-strip__num">03 /</p>
+        <p class="feature-strip__title">Free <em>Returns</em></p>
+        <p class="feature-strip__text">Not quite right? Return within 30 days, no questions asked. Free shipping on orders over &euro;75. We make it easy.</p>
+      </div>
+      <div class="feature-strip__item reveal reveal-delay-4">
+        <p class="feature-strip__num">04 /</p>
+        <p class="feature-strip__title">Yarn to <em>You</em></p>
+        <p class="feature-strip__text">We control every step &mdash; from the first thread of premium European fabric to the finished product on your shoulders.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════
+       9. FIT FINDER CTA
+       ═══════════════════════════════════════════════ -->
+  <section class="fit-finder" id="fit-finder">
+    <div class="fit-finder__content">
+      <div class="section-label reveal">
+        <span class="section-label__line"></span>
+        <span class="section-label__text">Reduce Returns. Build Confidence.</span>
+      </div>
+
+      <h2 class="section-heading reveal reveal-delay-1">
+        Find Your Perfect<br><em>Fit</em>
+      </h2>
+
+      <p class="fit-finder__sub reveal reveal-delay-2">
+        No measuring tape needed. Answer 4 quick questions and we&rsquo;ll recommend your ideal size and style.
+      </p>
+
+      <div class="fit-finder__ctas reveal reveal-delay-3">
+        <a href="#" class="cta-primary">Start the Fit Quiz <span class="arrow">&rarr;</span></a>
+        <a href="#" class="btn-ghost">View Size Guide</a>
+      </div>
+
+      <p class="fit-finder__testimonial reveal reveal-delay-4">
+        &ldquo;This quiz got my size exactly right. First bra I haven&rsquo;t had to return.&rdquo; &mdash; Maria K.
+      </p>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════
+       10. UGC / REVIEWS
+       ═══════════════════════════════════════════════ -->
+  <section class="ugc-section" id="reviews">
+    <div class="ugc-section__header">
+      <div class="reveal">
+        <div class="section-label">
+          <span class="section-label__line"></span>
+          <span class="section-label__text">Real Women. Real Fit.</span>
+        </div>
+        <h2 class="section-heading">What Our <em>Customers</em> Say</h2>
+      </div>
+      <p class="ugc-section__meta reveal reveal-delay-2">Tag @conturelle to be featured</p>
+    </div>
+
+    <div class="ugc-grid">
+      <div class="ugc-card reveal reveal-delay-1">
+        <div class="ugc-card__photo"><img src="images/swing-2.jpg" alt="Customer review" loading="lazy"></div>
+        <div class="ugc-card__content">
+          <p class="ugc-card__stars">&#9733;&#9733;&#9733;&#9733;&#9733;</p>
+          <p class="ugc-card__quote">&ldquo;Finally a bra that actually fits. The spacer cups are incredibly comfortable.&rdquo;</p>
+          <p class="ugc-card__author">&mdash; Sarah M., Size 80D</p>
+        </div>
+      </div>
+      <div class="ugc-card reveal reveal-delay-2">
+        <div class="ugc-card__photo"><img src="images/millefleurs-3.jpg" alt="Customer review" loading="lazy"></div>
+        <div class="ugc-card__content">
+          <p class="ugc-card__stars">&#9733;&#9733;&#9733;&#9733;&#9733;</p>
+          <p class="ugc-card__quote">&ldquo;The Mille Fleurs is gorgeous. Beautiful lace and the fit is perfect under anything.&rdquo;</p>
+          <p class="ugc-card__author">&mdash; Anna L., Size 75C</p>
+        </div>
+      </div>
+      <div class="ugc-card reveal reveal-delay-3">
+        <div class="ugc-card__photo"><img src="images/provence-3.jpg" alt="Customer review" loading="lazy"></div>
+        <div class="ugc-card__content">
+          <p class="ugc-card__stars">&#9733;&#9733;&#9733;&#9733;&#9733;</p>
+          <p class="ugc-card__quote">&ldquo;I&rsquo;ve been wearing Conturelle for 5 years. The quality is unmatched.&rdquo;</p>
+          <p class="ugc-card__author">&mdash; Julia K., Size 85E</p>
+        </div>
+      </div>
+      <div class="ugc-card reveal reveal-delay-4">
+        <div class="ugc-card__photo"><img src="images/purefeel-2.jpg" alt="Customer review" loading="lazy"></div>
+        <div class="ugc-card__content">
+          <p class="ugc-card__stars">&#9733;&#9733;&#9733;&#9733;&#9734;</p>
+          <p class="ugc-card__quote">&ldquo;The Pure Feeling T-Shirt Bra is invisible under everything. So comfortable for all day.&rdquo;</p>
+          <p class="ugc-card__author">&mdash; Lena W., Size 80B</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════
+       11. EMAIL CAPTURE
+       ═══════════════════════════════════════════════ -->
+  <section class="email-capture">
+    <div class="section-label reveal">
+      <span class="section-label__line"></span>
+      <span class="section-label__text">Exclusive Offer</span>
+    </div>
+
+    <h2 class="section-heading reveal reveal-delay-1">Your First Fit<br>Is <em>On Us</em></h2>
+
+    <p class="email-capture__desc reveal reveal-delay-2">
+      Get 10% off your first order + exclusive early access to new collections.
+    </p>
+
+    <form class="email-capture__form reveal reveal-delay-3" onsubmit="return false;">
+      <input type="email" class="email-capture__input" placeholder="Enter your email" aria-label="Email address">
+      <button type="submit" class="email-capture__submit">Get 10% Off</button>
+    </form>
+
+    <p class="email-capture__privacy reveal reveal-delay-4">No spam. Unsubscribe anytime. We respect your privacy.</p>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════
+       12. CAMPAIGN BANNER
+       ═══════════════════════════════════════════════ -->
+  <section class="editorial">
+    <div class="editorial__bg" data-parallax>
+      <img src="images/festival-1.jpg" alt="Conturelle Spring Collection" loading="lazy">
+    </div>
+    <div class="editorial__overlay"></div>
+    <div class="editorial__content reveal">
+      <div class="editorial__line"></div>
+      <p class="editorial__eyebrow">Spring Collection 2026</p>
+      <p class="editorial__statement">
+        <strong>New</strong><br>
+        <em>Arrivals</em>
+      </p>
+      <p class="editorial__sub">Fresh styles in the lightest European fabrics. Designed for warm days and effortless comfort.</p>
+      <div class="editorial__ctas">
+        <a href="#" class="cta-primary">Shop New Arrivals <span class="arrow">&rarr;</span></a>
+        <a href="#" class="btn-ghost">Shop Sale &mdash; Up to 30% Off</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════
+       13. FOOTER
+       ═══════════════════════════════════════════════ -->
+  <footer class="footer">
+    <div class="footer__grid">
+      <div>
+        <p class="footer__brand-name">Conturelle</p>
+        <p class="footer__brand-sub">by Felina</p>
+        <p class="footer__brand-tagline">Engineered for the Way You Move. Since 1885.</p>
+        <div class="footer__social">
+          <a href="#">Instagram</a>
+          <a href="#">Pinterest</a>
+          <a href="#">TikTok</a>
+          <a href="#">Facebook</a>
+        </div>
+      </div>
+
+      <div>
+        <p class="footer__col-title">Shop</p>
+        <ul class="footer__links">
+          <li><a href="#">Spacer Bras</a></li>
+          <li><a href="#">Lace Bras</a></li>
+          <li><a href="#">T-Shirt Bras</a></li>
+          <li><a href="#">Briefs</a></li>
+          <li><a href="#">Complete Sets</a></li>
+          <li><a href="#">Sale</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <p class="footer__col-title">Help</p>
+        <ul class="footer__links">
+          <li><a href="#">Size Guide</a></li>
+          <li><a href="#">Fit Finder Quiz</a></li>
+          <li><a href="#">Shipping</a></li>
+          <li><a href="#">Returns</a></li>
+          <li><a href="#">Contact Us</a></li>
+          <li><a href="#">FAQs</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <p class="footer__col-title">About</p>
+        <ul class="footer__links">
+          <li><a href="#">Our Story</a></li>
+          <li><a href="#">140 Years of Heritage</a></li>
+          <li><a href="#">Sustainability</a></li>
+          <li><a href="#">Press</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="footer__trust-bar">
+      Secure Checkout &middot; OEKO-TEX&reg; Certified &middot; Made in Europe
+    </div>
+
+    <div class="footer__bottom">
+      <p class="footer__copy">&copy; 2026 Conturelle by Felina &mdash; European Lingerie Group</p>
+      <ul class="footer__legal">
+        <li><a href="#">Privacy Policy</a></li>
+        <li><a href="#">Terms of Service</a></li>
+        <li><a href="#">Imprint</a></li>
+        <li><a href="#">Cookie Settings</a></li>
+      </ul>
+    </div>
+  </footer>
+
+  <!-- ═══════════════════════════════════════════════
+       JAVASCRIPT
+       ═══════════════════════════════════════════════ -->
+  <script>
+    (function() {
+      // ─── Announcement Bar ───
+      var bar = document.getElementById('announcementBar');
+      var nav = document.querySelector('.site-nav');
+      var closeBtn = bar.querySelector('.announcement-close');
+
+      // Rotate messages
+      setInterval(function() {
+        var msgs = bar.querySelectorAll('.announcement-msg');
+        var active = bar.querySelector('.announcement-msg.active');
+        if (!active) return;
+        var idx = [].indexOf.call(msgs, active);
+        active.classList.remove('active');
+        msgs[(idx + 1) % msgs.length].classList.add('active');
+      }, 4000);
+
+      // Close announcement
+      closeBtn.addEventListener('click', function() {
+        bar.classList.add('is-hidden');
+        nav.classList.add('no-announcement');
+        document.documentElement.style.setProperty('--announcement-height', '0px');
+      });
+
+      // ─── Sticky Nav on Scroll ───
+      var ticking = false;
+
+      function onScroll() {
+        if (!ticking) {
+          requestAnimationFrame(function() {
+            if (window.scrollY > 50) {
+              nav.classList.add('scrolled');
+            } else {
+              nav.classList.remove('scrolled');
+            }
+
+            // Parallax on data-parallax elements
+            document.querySelectorAll('[data-parallax]').forEach(function(el) {
+              var rect = el.getBoundingClientRect();
+              var viewH = window.innerHeight;
+              if (rect.top < viewH && rect.bottom > 0) {
+                var progress = (viewH - rect.top) / (viewH + rect.height);
+                var shift = (progress - 0.5) * 60;
+                el.querySelector('img').style.transform = 'scale(1.08) translateY(' + shift + 'px)';
+              }
+            });
+
+            ticking = false;
+          });
+          ticking = true;
+        }
+      }
+
+      window.addEventListener('scroll', onScroll, { passive: true });
+
+      // ─── Scroll Reveal (IntersectionObserver) ───
+      var revealEls = document.querySelectorAll('.reveal, .reveal-left, .reveal-right');
+      var revealObserver = new IntersectionObserver(function(entries) {
+        entries.forEach(function(entry) {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('is-visible');
+            revealObserver.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.15, rootMargin: '0px 0px -50px 0px' });
+
+      revealEls.forEach(function(el) { revealObserver.observe(el); });
+
+      // ─── Mobile Menu Toggle ───
+      var hamburger = document.querySelector('.site-nav__hamburger');
+      var mobileMenu = document.querySelector('.mobile-menu');
+
+      hamburger.addEventListener('click', function() {
+        hamburger.classList.toggle('is-open');
+        mobileMenu.classList.toggle('is-open');
+        document.body.style.overflow = mobileMenu.classList.contains('is-open') ? 'hidden' : '';
+      });
+
+      mobileMenu.querySelectorAll('a').forEach(function(link) {
+        link.addEventListener('click', function() {
+          hamburger.classList.remove('is-open');
+          mobileMenu.classList.remove('is-open');
+          document.body.style.overflow = '';
+        });
+      });
+
+      // ─── Smooth Scroll for Anchor Links ───
+      document.querySelectorAll('a[href^="#"]').forEach(function(anchor) {
+        anchor.addEventListener('click', function(e) {
+          var href = this.getAttribute('href');
+          if (href === '#') return;
+          var target = document.querySelector(href);
+          if (target) {
+            e.preventDefault();
+            var navH = nav.offsetHeight;
+            var top = target.getBoundingClientRect().top + window.pageYOffset - navH;
+            window.scrollTo({ top: top, behavior: 'smooth' });
+          }
+        });
+      });
+
+      // ─── Quick-Add Toggle ───
+      window.toggleQuickAdd = function(btn) {
+        var card = btn.closest('.bestsellers__card');
+        var panel = card.querySelector('.quick-add-panel');
+        panel.classList.toggle('is-open');
+      };
+
+      // ─── Quick-Add Size Selection ───
+      document.querySelectorAll('.qa-size').forEach(function(btn) {
+        btn.addEventListener('click', function() {
+          var siblings = this.parentElement.querySelectorAll('.qa-size');
+          siblings.forEach(function(s) { s.classList.remove('selected'); });
+          this.classList.add('selected');
+        });
+      });
+
+    })();
+  </script>
+
+</body>
+</html>

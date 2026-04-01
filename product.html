@@ -1,0 +1,1010 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Silhouette Spacer Bra — Conturelle</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600&family=Jost:wght@200;300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --espresso: #2C2220;
+    --deep: #1A1412;
+    --warm-white: #FAF7F4;
+    --cream: #F3EDE6;
+    --gold: #C4956A;
+    --gold-hover: #B38559;
+    --champagne: #E8D5C4;
+    --taupe: #6B5B52;
+    --muted: #9B8B82;
+    --border: #E5DDD5;
+    --sale-red: #B5484A;
+    --success: #4A7C59;
+    --serif: 'Cormorant Garamond', Georgia, serif;
+    --sans: 'Jost', 'Helvetica Neue', sans-serif;
+    --announcement-height: 36px;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: var(--sans);
+    background: var(--warm-white);
+    color: var(--espresso);
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+  }
+
+  /* ═══ ANNOUNCEMENT BAR ═══ */
+  .announcement-bar {
+    position: fixed; top: 0; left: 0; right: 0;
+    z-index: 200;
+    background: var(--espresso);
+    border-bottom: 1px solid rgba(196,149,106,0.15);
+    padding: 10px 48px;
+    display: flex; justify-content: center; align-items: center;
+    height: var(--announcement-height);
+  }
+  .announcement-bar.is-hidden { display: none; }
+  .announcement-ticker { display: flex; align-items: center; min-height: 16px; }
+  .announcement-msg { font-size: 10px; letter-spacing: 0.3em; text-transform: uppercase; color: var(--gold); display: none; white-space: nowrap; }
+  .announcement-msg.active { display: inline; }
+  .announcement-close { position: absolute; right: 16px; background: none; border: none; color: rgba(250,247,244,0.3); font-size: 16px; cursor: pointer; }
+
+  /* ═══ NAV ═══ */
+  .site-nav {
+    position: fixed; top: var(--announcement-height); left: 0; right: 0;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 20px 3.5%;
+    background: rgba(250,247,244,0.95);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+    z-index: 100;
+    transition: top 0.3s ease;
+  }
+  .site-nav.no-announcement { top: 0; }
+  .site-nav__logo { font-family: var(--serif); font-size: 24px; font-weight: 600; color: var(--espresso); text-decoration: none; letter-spacing: 0.13em; text-transform: uppercase; }
+  .site-nav__center { display: flex; gap: 28px; list-style: none; }
+  .site-nav__center a { font-size: 11px; font-weight: 400; color: var(--taupe); text-decoration: none; letter-spacing: 0.08em; text-transform: uppercase; transition: color 0.3s; }
+  .site-nav__center a:hover { color: var(--espresso); }
+  .site-nav__right { display: flex; align-items: center; gap: 20px; }
+  .site-nav__right a { font-size: 11px; color: var(--taupe); text-decoration: none; transition: color 0.3s; }
+  .site-nav__right a:hover { color: var(--espresso); }
+  .site-nav__cart { position: relative; cursor: pointer; background: none; border: none; }
+  .site-nav__cart svg { stroke: var(--taupe); }
+  .site-nav__cart-count { position: absolute; top: -6px; right: -10px; width: 15px; height: 15px; background: var(--gold); color: #fff; font-size: 8px; font-weight: 600; display: flex; align-items: center; justify-content: center; border-radius: 50%; }
+  .site-nav__hamburger { display: none; flex-direction: column; gap: 5px; width: 28px; height: 28px; background: none; border: none; cursor: pointer; }
+  .site-nav__hamburger span { display: block; width: 100%; height: 1.5px; background: var(--espresso); }
+
+  /* ═══ BREADCRUMB ═══ */
+  .breadcrumb {
+    margin-top: calc(var(--announcement-height) + 64px);
+    padding: 14px 3.5%;
+    font-size: 11px; color: var(--muted);
+    border-bottom: 1px solid var(--border);
+  }
+  .breadcrumb a { color: var(--muted); text-decoration: none; transition: color 0.2s; }
+  .breadcrumb a:hover { color: var(--gold); }
+  .breadcrumb span { margin: 0 8px; opacity: 0.5; }
+
+  /* ═══ PRODUCT SECTION ═══ */
+  .pdp { display: grid; grid-template-columns: 60px 1fr 420px; gap: 0; min-height: 85vh; }
+
+  /* Thumbnails */
+  .pdp__thumbs { padding: 24px 12px; display: flex; flex-direction: column; gap: 8px; border-right: 1px solid var(--border); }
+  .pdp__thumb { width: 56px; height: 72px; overflow: hidden; cursor: pointer; border: 2px solid transparent; transition: border-color 0.2s; opacity: 0.6; }
+  .pdp__thumb.active { border-color: var(--gold); opacity: 1; }
+  .pdp__thumb:hover { opacity: 1; }
+  .pdp__thumb img { width: 100%; height: 100%; object-fit: cover; }
+
+  /* Main image */
+  .pdp__main-image { position: relative; overflow: hidden; cursor: zoom-in; border-right: 1px solid var(--border); }
+  .pdp__main-image img { width: 100%; height: 100%; object-fit: cover; object-position: center top; transition: transform 0.4s ease; }
+  .pdp__main-image:hover img { transform: scale(1.05); }
+  .pdp__badge { position: absolute; top: 20px; left: 20px; font-size: 8px; letter-spacing: 0.2em; text-transform: uppercase; padding: 5px 12px; background: var(--sale-red); color: #fff; z-index: 2; }
+
+  /* Buy box */
+  .pdp__buybox { padding: 32px 28px; overflow-y: auto; }
+  .pdp__brand { font-size: 10px; letter-spacing: 0.25em; text-transform: uppercase; color: var(--muted); margin-bottom: 6px; }
+  .pdp__title { font-family: var(--serif); font-size: 28px; font-weight: 400; color: var(--espresso); margin-bottom: 4px; }
+  .pdp__subtitle { font-family: var(--serif); font-size: 15px; font-style: italic; color: var(--taupe); margin-bottom: 16px; }
+
+  .pdp__rating { display: flex; align-items: center; gap: 8px; margin-bottom: 20px; cursor: pointer; }
+  .pdp__rating-stars { color: var(--gold); font-size: 13px; letter-spacing: 1px; }
+  .pdp__rating-text { font-size: 12px; color: var(--taupe); }
+  .pdp__rating:hover .pdp__rating-text { text-decoration: underline; }
+
+  .pdp__price-row { display: flex; align-items: center; gap: 10px; margin-bottom: 4px; }
+  .pdp__price-original { font-size: 15px; color: var(--muted); text-decoration: line-through; }
+  .pdp__price-sale { font-size: 22px; font-weight: 500; color: var(--sale-red); }
+  .pdp__price-badge { font-size: 9px; letter-spacing: 0.15em; background: var(--sale-red); color: #fff; padding: 2px 8px; }
+  .pdp__bnpl { font-size: 11px; color: var(--muted); margin-bottom: 24px; }
+
+  .pdp__divider { height: 1px; background: var(--border); margin: 20px 0; }
+
+  /* Color swatches */
+  .pdp__option-label { font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--taupe); margin-bottom: 10px; }
+  .pdp__option-label strong { color: var(--espresso); font-weight: 500; }
+  .pdp__swatches { display: flex; gap: 10px; margin-bottom: 8px; }
+  .pdp__swatch { width: 28px; height: 28px; border-radius: 50%; border: 2px solid transparent; cursor: pointer; transition: all 0.2s; position: relative; }
+  .pdp__swatch.active { border-color: var(--gold); box-shadow: 0 0 0 3px var(--warm-white), 0 0 0 5px var(--gold); }
+  .pdp__swatch:hover { transform: scale(1.1); }
+  .pdp__swatch-names { display: flex; gap: 10px; margin-bottom: 20px; }
+  .pdp__swatch-name { font-size: 9px; letter-spacing: 0.1em; color: var(--muted); text-transform: uppercase; }
+
+  /* Size picker */
+  .pdp__sizes { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 16px; }
+  .pdp__size-btn { min-width: 44px; height: 44px; display: flex; align-items: center; justify-content: center; background: transparent; border: 1px solid var(--border); color: var(--espresso); font-family: var(--sans); font-size: 12px; cursor: pointer; transition: all 0.2s; }
+  .pdp__size-btn:hover { border-color: var(--espresso); }
+  .pdp__size-btn.selected { background: var(--espresso); color: #fff; border-color: var(--espresso); }
+  .pdp__size-btn.oos { opacity: 0.3; text-decoration: line-through; cursor: not-allowed; }
+
+  .pdp__size-toggle { display: flex; align-items: center; gap: 12px; margin-bottom: 12px; }
+  .pdp__size-toggle-btn { font-size: 10px; letter-spacing: 0.1em; color: var(--muted); background: none; border: none; cursor: pointer; padding: 4px 8px; border-radius: 2px; }
+  .pdp__size-toggle-btn.active { background: var(--espresso); color: #fff; }
+
+  .pdp__fit-link { display: flex; align-items: center; gap: 6px; font-size: 11px; color: var(--gold); text-decoration: none; margin-bottom: 16px; transition: gap 0.3s; }
+  .pdp__fit-link:hover { gap: 10px; }
+
+  .pdp__scarcity { font-size: 11px; color: var(--sale-red); margin-bottom: 16px; display: flex; align-items: center; gap: 6px; }
+
+  /* ATC button */
+  .pdp__atc {
+    width: 100%; height: 52px;
+    background: var(--gold); color: #fff;
+    font-family: var(--sans); font-size: 12px; font-weight: 500;
+    letter-spacing: 0.18em; text-transform: uppercase;
+    border: none; cursor: pointer;
+    transition: background 0.3s, transform 0.2s;
+    margin-bottom: 20px;
+  }
+  .pdp__atc:hover { background: var(--gold-hover); transform: translateY(-1px); }
+
+  .pdp__trust { display: flex; flex-direction: column; gap: 8px; }
+  .pdp__trust-item { font-size: 11px; color: var(--taupe); display: flex; align-items: center; gap: 8px; }
+  .pdp__trust-icon { color: var(--gold); font-size: 13px; }
+
+  /* ═══ QUICK BENEFITS ═══ */
+  .benefits { max-width: 900px; margin: 0 auto; padding: 48px 3.5%; display: grid; grid-template-columns: 1fr 1fr; gap: 16px 40px; border-bottom: 1px solid var(--border); }
+  .benefit { display: flex; gap: 10px; font-size: 14px; color: var(--taupe); line-height: 1.6; }
+  .benefit-icon { color: var(--gold); font-size: 16px; flex-shrink: 0; margin-top: 2px; }
+
+  /* ═══ ACCORDIONS ═══ */
+  .accordions { max-width: 900px; margin: 0 auto; padding: 0 3.5%; }
+  .accordion { border-bottom: 1px solid var(--border); }
+  .accordion__header { display: flex; align-items: center; justify-content: space-between; padding: 20px 0; cursor: pointer; user-select: none; }
+  .accordion__title { font-family: var(--serif); font-size: 18px; font-weight: 400; color: var(--espresso); }
+  .accordion__icon { font-size: 18px; color: var(--muted); transition: transform 0.3s; }
+  .accordion.is-open .accordion__icon { transform: rotate(45deg); }
+  .accordion__body { max-height: 0; overflow: hidden; transition: max-height 0.4s ease; }
+  .accordion__content { padding: 0 0 24px; font-size: 13px; color: var(--taupe); line-height: 1.8; }
+  .accordion__content ul { padding-left: 16px; }
+  .accordion__content li { margin-bottom: 4px; }
+  .accordion__content a { color: var(--gold); text-decoration: none; }
+
+  /* ═══ COMPLETE THE LOOK ═══ */
+  .cross-sell { max-width: 900px; margin: 0 auto; padding: 48px 3.5%; }
+  .cross-sell__title { font-family: var(--serif); font-size: 28px; font-weight: 400; color: var(--espresso); margin-bottom: 8px; }
+  .cross-sell__subtitle { font-size: 14px; color: var(--taupe); margin-bottom: 28px; }
+  .cross-sell__grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 24px; }
+  .cross-sell__card { border: 1px solid var(--border); padding: 16px; }
+  .cross-sell__card-img { aspect-ratio: 3/4; overflow: hidden; margin-bottom: 12px; }
+  .cross-sell__card-img img { width: 100%; height: 100%; object-fit: cover; }
+  .cross-sell__card-name { font-family: var(--serif); font-size: 17px; color: var(--espresso); margin-bottom: 4px; }
+  .cross-sell__card-swatches { display: flex; gap: 6px; margin-bottom: 8px; }
+  .cross-sell__card-price { font-size: 14px; color: var(--espresso); margin-bottom: 12px; }
+  .cross-sell__card-sizes { display: flex; gap: 4px; margin-bottom: 12px; }
+  .cross-sell__size-btn { width: 36px; height: 36px; display: flex; align-items: center; justify-content: center; border: 1px solid var(--border); background: none; font-size: 10px; cursor: pointer; transition: all 0.2s; }
+  .cross-sell__size-btn:hover, .cross-sell__size-btn.selected { background: var(--espresso); color: #fff; border-color: var(--espresso); }
+  .cross-sell__add-btn { width: 100%; height: 40px; background: transparent; border: 1px solid var(--gold); color: var(--gold); font-size: 10px; letter-spacing: 0.15em; text-transform: uppercase; cursor: pointer; transition: all 0.3s; }
+  .cross-sell__add-btn:hover { background: var(--gold); color: #fff; }
+
+  /* Bundle box */
+  .bundle { background: var(--cream); border: 1px solid var(--border); padding: 24px; margin-top: 16px; }
+  .bundle__badge { font-size: 9px; letter-spacing: 0.25em; text-transform: uppercase; color: var(--gold); margin-bottom: 10px; }
+  .bundle__items { font-size: 14px; color: var(--espresso); margin-bottom: 8px; line-height: 1.6; }
+  .bundle__price-row { display: flex; align-items: center; gap: 10px; margin-bottom: 4px; }
+  .bundle__price-original { font-size: 14px; color: var(--muted); text-decoration: line-through; }
+  .bundle__price-sale { font-size: 18px; font-weight: 500; color: var(--espresso); }
+  .bundle__savings { font-size: 11px; color: var(--success); margin-bottom: 16px; }
+  .bundle__sizes { display: flex; gap: 4px; margin-bottom: 14px; align-items: center; }
+  .bundle__sizes-label { font-size: 10px; color: var(--muted); letter-spacing: 0.1em; text-transform: uppercase; margin-right: 8px; }
+  .bundle__atc { width: 100%; height: 44px; background: var(--gold); color: #fff; border: none; font-size: 11px; font-weight: 500; letter-spacing: 0.15em; text-transform: uppercase; cursor: pointer; transition: background 0.3s; }
+  .bundle__atc:hover { background: var(--gold-hover); }
+
+  /* ═══ YOU MAY ALSO LOVE ═══ */
+  .upsell { padding: 48px 3.5%; border-top: 1px solid var(--border); }
+  .upsell__header { max-width: 1200px; margin: 0 auto 32px; }
+  .upsell__title { font-family: var(--serif); font-size: 28px; font-weight: 400; color: var(--espresso); }
+  .upsell__grid { display: flex; gap: 20px; max-width: 1200px; margin: 0 auto; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: none; padding-bottom: 8px; }
+  .upsell__grid::-webkit-scrollbar { display: none; }
+  .upsell__card { flex: 0 0 260px; scroll-snap-align: start; cursor: pointer; }
+  .upsell__card-img { aspect-ratio: 3/4; overflow: hidden; margin-bottom: 12px; position: relative; }
+  .upsell__card-img img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s; }
+  .upsell__card:hover .upsell__card-img img { transform: scale(1.04); }
+  .upsell__card-badge { position: absolute; top: 10px; left: 10px; font-size: 8px; letter-spacing: 0.2em; text-transform: uppercase; padding: 3px 8px; background: var(--espresso); color: var(--gold); border: 1px solid rgba(196,149,106,0.3); }
+  .upsell__card-collection { font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); margin-bottom: 4px; }
+  .upsell__card-name { font-family: var(--serif); font-size: 16px; color: var(--espresso); margin-bottom: 6px; }
+  .upsell__card-bottom { display: flex; align-items: center; justify-content: space-between; }
+  .upsell__card-price { font-size: 14px; color: var(--espresso); }
+  .upsell__card-stars { color: var(--gold); font-size: 10px; }
+
+  /* ═══ REVIEWS ═══ */
+  .reviews { max-width: 900px; margin: 0 auto; padding: 48px 3.5%; border-top: 1px solid var(--border); }
+  .reviews__header { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 32px; gap: 32px; }
+  .reviews__overall { flex-shrink: 0; }
+  .reviews__overall-stars { font-size: 20px; color: var(--gold); letter-spacing: 2px; margin-bottom: 4px; }
+  .reviews__overall-text { font-family: var(--serif); font-size: 28px; color: var(--espresso); }
+  .reviews__overall-count { font-size: 12px; color: var(--muted); margin-top: 4px; }
+
+  .reviews__bars { flex: 1; max-width: 300px; }
+  .reviews__bar-row { display: flex; align-items: center; gap: 8px; margin-bottom: 6px; }
+  .reviews__bar-label { font-size: 11px; color: var(--taupe); width: 20px; }
+  .reviews__bar { flex: 1; height: 6px; background: var(--border); border-radius: 3px; overflow: hidden; }
+  .reviews__bar-fill { height: 100%; background: var(--gold); border-radius: 3px; }
+  .reviews__bar-pct { font-size: 10px; color: var(--muted); width: 30px; text-align: right; }
+
+  .reviews__fit { display: flex; gap: 8px; margin-bottom: 24px; }
+  .reviews__fit-chip { padding: 8px 16px; font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; border: 1px solid var(--border); color: var(--muted); cursor: pointer; transition: all 0.2s; }
+  .reviews__fit-chip.active { background: var(--espresso); color: #fff; border-color: var(--espresso); }
+
+  .reviews__filters { display: flex; gap: 8px; margin-bottom: 28px; overflow-x: auto; scrollbar-width: none; }
+  .reviews__filters::-webkit-scrollbar { display: none; }
+  .reviews__filter { padding: 8px 16px; font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase; border: 1px solid var(--border); color: var(--taupe); background: none; cursor: pointer; white-space: nowrap; transition: all 0.2s; }
+  .reviews__filter.active { background: var(--espresso); color: #fff; border-color: var(--espresso); }
+
+  .review-card { border: 1px solid var(--border); padding: 20px; margin-bottom: 16px; }
+  .review-card__top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; }
+  .review-card__stars { color: var(--gold); font-size: 12px; letter-spacing: 1px; }
+  .review-card__author { font-size: 13px; font-weight: 500; color: var(--espresso); }
+  .review-card__meta { font-size: 10px; color: var(--muted); letter-spacing: 0.06em; margin-bottom: 12px; }
+  .review-card__text { font-family: var(--serif); font-size: 15px; font-style: italic; color: var(--taupe); line-height: 1.65; margin-bottom: 14px; }
+  .review-card__tags { display: flex; gap: 16px; font-size: 10px; color: var(--muted); letter-spacing: 0.06em; margin-bottom: 12px; }
+  .review-card__helpful { display: flex; align-items: center; gap: 12px; font-size: 11px; color: var(--muted); }
+  .review-card__helpful button { background: none; border: none; cursor: pointer; font-size: 13px; color: var(--muted); transition: color 0.2s; }
+  .review-card__helpful button:hover { color: var(--gold); }
+
+  .reviews__actions { display: flex; gap: 12px; margin-top: 24px; }
+  .reviews__btn { height: 44px; padding: 0 24px; font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; cursor: pointer; transition: all 0.3s; }
+  .reviews__btn--load { background: none; border: 1px solid var(--border); color: var(--taupe); }
+  .reviews__btn--load:hover { border-color: var(--espresso); color: var(--espresso); }
+  .reviews__btn--write { background: var(--gold); border: none; color: #fff; }
+  .reviews__btn--write:hover { background: var(--gold-hover); }
+
+  /* ═══ RECENTLY VIEWED ═══ */
+  .recently { padding: 48px 3.5%; border-top: 1px solid var(--border); }
+  .recently__title { font-family: var(--serif); font-size: 22px; color: var(--espresso); margin-bottom: 24px; max-width: 1200px; margin-left: auto; margin-right: auto; }
+  .recently__grid { display: flex; gap: 16px; max-width: 1200px; margin: 0 auto; overflow-x: auto; scrollbar-width: none; }
+  .recently__grid::-webkit-scrollbar { display: none; }
+  .recently__card { flex: 0 0 180px; }
+  .recently__card-img { aspect-ratio: 3/4; overflow: hidden; margin-bottom: 8px; }
+  .recently__card-img img { width: 100%; height: 100%; object-fit: cover; }
+  .recently__card-name { font-family: var(--serif); font-size: 14px; color: var(--espresso); margin-bottom: 4px; }
+  .recently__card-price { font-size: 12px; color: var(--taupe); }
+
+  /* ═══ FOOTER ═══ */
+  .footer { background: var(--espresso); padding: 64px 4% 0; }
+  .footer__grid { display: grid; grid-template-columns: 1.5fr 1fr 1fr 1fr; gap: 40px; max-width: 1200px; margin: 0 auto; padding-bottom: 48px; border-bottom: 1px solid rgba(255,255,255,0.08); }
+  .footer__brand-name { font-family: var(--serif); font-size: 22px; font-weight: 600; color: var(--warm-white); letter-spacing: 0.13em; text-transform: uppercase; margin-bottom: 8px; }
+  .footer__brand-sub { font-size: 11px; color: var(--gold); letter-spacing: 0.1em; margin-bottom: 16px; }
+  .footer__brand-tagline { font-size: 13px; font-weight: 300; color: var(--champagne); line-height: 1.65; max-width: 260px; opacity: 0.7; }
+  .footer__col-title { font-size: 9px; font-weight: 600; letter-spacing: 0.2em; text-transform: uppercase; color: var(--gold); margin-bottom: 20px; }
+  .footer__links { list-style: none; display: flex; flex-direction: column; gap: 12px; }
+  .footer__links a { font-size: 13px; font-weight: 300; color: var(--champagne); text-decoration: none; opacity: 0.6; transition: opacity 0.3s; }
+  .footer__links a:hover { opacity: 1; }
+  .footer__trust-bar { max-width: 1200px; margin: 0 auto; padding: 20px 0; text-align: center; font-size: 10px; letter-spacing: 0.15em; text-transform: uppercase; color: var(--champagne); opacity: 0.3; border-bottom: 1px solid rgba(255,255,255,0.08); }
+  .footer__bottom { display: flex; align-items: center; justify-content: space-between; max-width: 1200px; margin: 0 auto; padding: 24px 0; }
+  .footer__copy { font-size: 11px; font-weight: 300; color: var(--champagne); opacity: 0.4; }
+  .footer__legal { display: flex; gap: 20px; list-style: none; }
+  .footer__legal a { font-size: 11px; font-weight: 300; color: var(--champagne); text-decoration: none; opacity: 0.4; transition: opacity 0.3s; }
+  .footer__legal a:hover { opacity: 0.8; }
+
+  /* ═══ STICKY ATC BAR (mobile) ═══ */
+  .sticky-atc { display: none; }
+
+  /* ═══ CART DRAWER ═══ */
+  .cart-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 300; opacity: 0; pointer-events: none; transition: opacity 0.3s; }
+  .cart-overlay.is-open { opacity: 1; pointer-events: auto; }
+  .cart-drawer { position: fixed; top: 0; right: 0; width: 420px; height: 100vh; background: var(--warm-white); z-index: 301; transform: translateX(100%); transition: transform 0.3s ease; display: flex; flex-direction: column; }
+  .cart-drawer.is-open { transform: translateX(0); }
+  .cart-drawer__header { display: flex; align-items: center; justify-content: space-between; padding: 20px 24px; border-bottom: 1px solid var(--border); }
+  .cart-drawer__title { font-family: var(--serif); font-size: 20px; color: var(--espresso); }
+  .cart-drawer__close { background: none; border: none; font-size: 20px; color: var(--muted); cursor: pointer; }
+
+  .shipping-progress { background: var(--cream); padding: 14px 24px; border-bottom: 1px solid var(--border); }
+  .shipping-msg { font-size: 10px; letter-spacing: 0.15em; text-transform: uppercase; color: var(--gold); margin-bottom: 8px; }
+  .shipping-msg.complete { color: var(--success); }
+  .shipping-bar { height: 4px; background: var(--border); border-radius: 2px; overflow: hidden; }
+  .shipping-bar-fill { height: 100%; background: var(--gold); border-radius: 2px; transition: width 0.4s; }
+  .shipping-bar-fill.complete { background: var(--success); }
+  .shipping-amounts { display: flex; justify-content: space-between; font-size: 9px; color: var(--muted); margin-top: 4px; }
+
+  .cart-drawer__items { flex: 1; overflow-y: auto; padding: 20px 24px; }
+  .cart-item { display: flex; gap: 16px; padding-bottom: 20px; margin-bottom: 20px; border-bottom: 1px solid var(--border); }
+  .cart-item:last-child { border-bottom: none; margin-bottom: 0; }
+  .cart-item__img { width: 80px; height: 100px; overflow: hidden; flex-shrink: 0; }
+  .cart-item__img img { width: 100%; height: 100%; object-fit: cover; }
+  .cart-item__info { flex: 1; }
+  .cart-item__name { font-family: var(--serif); font-size: 15px; color: var(--espresso); margin-bottom: 2px; }
+  .cart-item__variant { font-size: 10px; color: var(--muted); letter-spacing: 0.06em; margin-bottom: 8px; }
+  .cart-item__price-row { display: flex; align-items: center; gap: 8px; margin-bottom: 10px; }
+  .cart-item__price-original { font-size: 12px; color: var(--muted); text-decoration: line-through; }
+  .cart-item__price { font-size: 14px; color: var(--espresso); }
+  .cart-item__qty { display: flex; align-items: center; gap: 0; }
+  .cart-item__qty-btn { width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; border: 1px solid var(--border); background: none; font-size: 14px; color: var(--taupe); cursor: pointer; }
+  .cart-item__qty-val { width: 36px; height: 32px; display: flex; align-items: center; justify-content: center; border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); font-size: 12px; }
+  .cart-item__remove { background: none; border: none; font-size: 10px; color: var(--muted); cursor: pointer; text-decoration: underline; margin-top: 6px; display: block; }
+
+  .cart-upsell { padding: 0 24px 20px; }
+  .cart-upsell__title { font-size: 10px; letter-spacing: 0.15em; text-transform: uppercase; color: var(--muted); margin-bottom: 12px; }
+  .cart-upsell__card { border: 1px solid var(--border); padding: 14px; display: flex; gap: 12px; margin-bottom: 10px; }
+  .cart-upsell__card-img { width: 60px; height: 75px; overflow: hidden; flex-shrink: 0; }
+  .cart-upsell__card-img img { width: 100%; height: 100%; object-fit: cover; }
+  .cart-upsell__card-info { flex: 1; }
+  .cart-upsell__card-name { font-family: var(--serif); font-size: 14px; color: var(--espresso); margin-bottom: 2px; }
+  .cart-upsell__card-price { font-size: 12px; color: var(--taupe); margin-bottom: 8px; }
+  .cart-upsell__card-add { height: 32px; padding: 0 16px; border: 1px solid var(--gold); background: none; color: var(--gold); font-size: 9px; letter-spacing: 0.12em; text-transform: uppercase; cursor: pointer; transition: all 0.3s; }
+  .cart-upsell__card-add:hover { background: var(--gold); color: #fff; }
+
+  .cart-drawer__footer { padding: 20px 24px; border-top: 1px solid var(--border); background: var(--cream); }
+  .cart-summary__row { display: flex; justify-content: space-between; font-size: 13px; color: var(--taupe); margin-bottom: 8px; }
+  .cart-summary__total { display: flex; justify-content: space-between; font-size: 16px; font-weight: 500; color: var(--espresso); margin-bottom: 4px; padding-top: 12px; border-top: 1px solid var(--border); }
+  .cart-summary__bnpl { font-size: 10px; color: var(--muted); margin-bottom: 16px; }
+  .cart-checkout-btn { width: 100%; height: 52px; background: var(--gold); color: #fff; border: none; font-size: 12px; font-weight: 500; letter-spacing: 0.18em; text-transform: uppercase; cursor: pointer; transition: background 0.3s; margin-bottom: 10px; }
+  .cart-checkout-btn:hover { background: var(--gold-hover); }
+  .cart-continue { display: block; text-align: center; font-size: 11px; color: var(--muted); text-decoration: underline; cursor: pointer; background: none; border: none; width: 100%; margin-bottom: 12px; }
+  .cart-trust { text-align: center; font-size: 9px; color: var(--muted); letter-spacing: 0.1em; }
+
+  /* ═══ RESPONSIVE ═══ */
+  @media (max-width: 1100px) {
+    .pdp { grid-template-columns: 60px 1fr 380px; }
+  }
+
+  @media (max-width: 768px) {
+    .announcement-bar { padding: 10px 40px 10px 16px; height: auto; min-height: var(--announcement-height); }
+    .announcement-msg { font-size: 9px; letter-spacing: 0.15em; }
+    .site-nav__center { display: none; }
+    .site-nav__hamburger { display: flex; }
+    .site-nav__logo { font-size: 20px; }
+    .site-nav { padding: 14px 5%; }
+    .breadcrumb { margin-top: calc(var(--announcement-height) + 52px); padding: 10px 5%; font-size: 10px; }
+
+    .pdp { grid-template-columns: 1fr; }
+    .pdp__thumbs { display: none; }
+    .pdp__main-image { aspect-ratio: 3/4; height: auto; border-right: none; border-bottom: 1px solid var(--border); }
+    .pdp__buybox { padding: 24px 5%; }
+    .pdp__title { font-size: 24px; }
+
+    .benefits { grid-template-columns: 1fr; padding: 32px 5%; gap: 14px; }
+    .accordions { padding: 0 5%; }
+    .cross-sell { padding: 32px 5%; }
+    .cross-sell__grid { grid-template-columns: 1fr 1fr; gap: 12px; }
+    .upsell { padding: 32px 5%; }
+    .upsell__card { flex: 0 0 200px; }
+    .reviews { padding: 32px 5%; }
+    .reviews__header { flex-direction: column; gap: 20px; }
+    .reviews__bars { max-width: none; }
+    .recently { padding: 32px 5%; }
+
+    .sticky-atc {
+      position: fixed; bottom: 0; left: 0; right: 0;
+      z-index: 160;
+      background: var(--espresso);
+      border-top: 1px solid rgba(196,149,106,0.2);
+      padding: 10px 16px calc(10px + env(safe-area-inset-bottom));
+      display: flex; align-items: center; justify-content: space-between;
+      transform: translateY(100%);
+      transition: transform 0.3s ease;
+    }
+    .sticky-atc.visible { transform: translateY(0); }
+    .sticky-atc__info { flex: 1; }
+    .sticky-atc__name { font-family: var(--serif); font-size: 14px; color: var(--warm-white); }
+    .sticky-atc__variant { font-size: 9px; color: rgba(250,247,244,0.4); letter-spacing: 0.1em; }
+    .sticky-atc__price { font-size: 13px; color: var(--warm-white); }
+    .sticky-atc__btn { padding: 14px 24px; background: var(--gold); color: var(--espresso); border: none; font-size: 10px; font-weight: 500; letter-spacing: 0.2em; text-transform: uppercase; cursor: pointer; min-height: 44px; white-space: nowrap; }
+
+    .cart-drawer { width: 100vw; }
+
+    .footer { padding: 48px 6% 0; }
+    .footer__grid { grid-template-columns: 1fr 1fr; gap: 28px; }
+    .footer__bottom { flex-direction: column; gap: 12px; text-align: center; }
+    .footer__legal { flex-wrap: wrap; justify-content: center; }
+  }
+
+  @media (max-width: 480px) {
+    .cross-sell__grid { grid-template-columns: 1fr; }
+    .footer__grid { grid-template-columns: 1fr; text-align: center; }
+  }
+</style>
+</head>
+<body>
+
+  <!-- ═══ ANNOUNCEMENT BAR ═══ -->
+  <div class="announcement-bar" id="announcementBar">
+    <div class="announcement-ticker">
+      <span class="announcement-msg active">Free Shipping on Orders Over &euro;75</span>
+      <span class="announcement-msg">30-Day Easy Returns &mdash; No Questions Asked</span>
+      <span class="announcement-msg">Crafted in Europe Since 1885</span>
+    </div>
+    <button class="announcement-close" aria-label="Close">&times;</button>
+  </div>
+
+  <!-- ═══ NAV ═══ -->
+  <nav class="site-nav">
+    <a href="index.html" class="site-nav__logo">Conturelle</a>
+    <ul class="site-nav__center">
+      <li><a href="index.html#bestsellers">Shop All</a></li>
+      <li><a href="index.html#categories">Categories</a></li>
+      <li><a href="index.html#heritage">Our Story</a></li>
+      <li><a href="index.html#fit-finder">Fit Finder</a></li>
+    </ul>
+    <div class="site-nav__right">
+      <a href="#">Search</a>
+      <button class="site-nav__cart" id="cartToggle" aria-label="Cart">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke-width="1.5"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>
+        <span class="site-nav__cart-count">2</span>
+      </button>
+      <button class="site-nav__hamburger" aria-label="Menu"><span></span><span></span><span></span></button>
+    </div>
+  </nav>
+
+  <!-- ═══ BREADCRUMB ═══ -->
+  <div class="breadcrumb">
+    <a href="index.html">Home</a><span>/</span>
+    <a href="#">Spacer Bras</a><span>/</span>
+    Silhouette Spacer Bra
+  </div>
+
+  <!-- ═══ PRODUCT SECTION ═══ -->
+  <section class="pdp">
+    <!-- Thumbnails -->
+    <div class="pdp__thumbs">
+      <div class="pdp__thumb active" data-img="images/swing-1.jpg"><img src="images/swing-1.jpg" alt="Front"></div>
+      <div class="pdp__thumb" data-img="images/swing-2.jpg"><img src="images/swing-2.jpg" alt="Model"></div>
+      <div class="pdp__thumb" data-img="images/swing-3.jpg"><img src="images/swing-3.jpg" alt="Back"></div>
+      <div class="pdp__thumb" data-img="images/softtouch-1.jpg"><img src="images/softtouch-1.jpg" alt="Side"></div>
+      <div class="pdp__thumb" data-img="images/provence-1.jpg"><img src="images/provence-1.jpg" alt="Detail"></div>
+      <div class="pdp__thumb" data-img="images/millefleurs-1.jpg"><img src="images/millefleurs-1.jpg" alt="Lifestyle"></div>
+    </div>
+
+    <!-- Main Image -->
+    <div class="pdp__main-image">
+      <span class="pdp__badge">-30%</span>
+      <img src="images/swing-1.jpg" alt="Silhouette Spacer Bra" id="mainImage">
+    </div>
+
+    <!-- Buy Box -->
+    <div class="pdp__buybox">
+      <p class="pdp__brand">Conturelle</p>
+      <h1 class="pdp__title">Silhouette Spacer Bra</h1>
+      <p class="pdp__subtitle">Daily Comfort</p>
+
+      <div class="pdp__rating" onclick="document.getElementById('reviews').scrollIntoView({behavior:'smooth'})">
+        <span class="pdp__rating-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</span>
+        <span class="pdp__rating-text">4.8 (124 reviews)</span>
+      </div>
+
+      <div class="pdp__price-row">
+        <span class="pdp__price-original">&euro;89.00</span>
+        <span class="pdp__price-sale">&euro;62.30</span>
+        <span class="pdp__price-badge">-30%</span>
+      </div>
+      <p class="pdp__bnpl">or 4 &times; &euro;15.58 with Klarna</p>
+
+      <div class="pdp__divider"></div>
+
+      <p class="pdp__option-label">Color: <strong>Champagne Nude</strong></p>
+      <div class="pdp__swatches">
+        <span class="pdp__swatch active" style="background:#D4BFB0;" title="Champagne"></span>
+        <span class="pdp__swatch" style="background:#2C2220;" title="Black"></span>
+        <span class="pdp__swatch" style="background:#C9A89A;" title="Rose"></span>
+        <span class="pdp__swatch" style="background:#F5EFE8;" title="Pearl"></span>
+      </div>
+
+      <div class="pdp__divider"></div>
+
+      <p class="pdp__option-label">Band Size (EU):</p>
+      <div class="pdp__sizes" id="bandSizes">
+        <button class="pdp__size-btn">70</button>
+        <button class="pdp__size-btn">75</button>
+        <button class="pdp__size-btn selected">80</button>
+        <button class="pdp__size-btn">85</button>
+        <button class="pdp__size-btn">90</button>
+        <button class="pdp__size-btn">95</button>
+        <button class="pdp__size-btn oos">100</button>
+      </div>
+
+      <p class="pdp__option-label">Cup Size:</p>
+      <div class="pdp__sizes" id="cupSizes">
+        <button class="pdp__size-btn">B</button>
+        <button class="pdp__size-btn">C</button>
+        <button class="pdp__size-btn selected">D</button>
+        <button class="pdp__size-btn">E</button>
+        <button class="pdp__size-btn">F</button>
+        <button class="pdp__size-btn">G</button>
+      </div>
+
+      <div class="pdp__size-toggle">
+        <button class="pdp__size-toggle-btn active">EU</button>
+        <button class="pdp__size-toggle-btn">UK</button>
+      </div>
+
+      <a href="#" class="pdp__fit-link">&#9432; Find Your Size &mdash; Take the 60-Second Fit Quiz &rarr;</a>
+
+      <p class="pdp__scarcity">&#9888; Only 3 left in 80D</p>
+
+      <button class="pdp__atc" id="mainAtcBtn">Add to Cart &mdash; &euro;62.30</button>
+
+      <div class="pdp__trust">
+        <span class="pdp__trust-item"><span class="pdp__trust-icon">&#10003;</span> Free shipping over &euro;75</span>
+        <span class="pdp__trust-item"><span class="pdp__trust-icon">&#10003;</span> 30-day hassle-free returns</span>
+        <span class="pdp__trust-item"><span class="pdp__trust-icon">&#128274;</span> Secure checkout</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ QUICK BENEFITS ═══ -->
+  <div class="benefits">
+    <div class="benefit"><span class="benefit-icon">&#10003;</span> Spacer foam cups for a natural, rounded shape</div>
+    <div class="benefit"><span class="benefit-icon">&#10003;</span> Breathable European microfiber &mdash; cool all day</div>
+    <div class="benefit"><span class="benefit-icon">&#10003;</span> Wide comfort straps that never dig in</div>
+    <div class="benefit"><span class="benefit-icon">&#10003;</span> 80-piece precision engineering</div>
+  </div>
+
+  <!-- ═══ ACCORDIONS ═══ -->
+  <div class="accordions">
+    <div class="accordion">
+      <div class="accordion__header"><span class="accordion__title">Details</span><span class="accordion__icon">+</span></div>
+      <div class="accordion__body"><div class="accordion__content">
+        <p><strong>Style:</strong> 81080</p>
+        <p>Padded underwired spacer bra with smooth, seamless cups for a natural rounded silhouette. Features adjustable straps, 3-position hook-and-eye closure, and powermesh side panels for a secure fit.</p>
+      </div></div>
+    </div>
+    <div class="accordion">
+      <div class="accordion__header"><span class="accordion__title">Materials &amp; Care</span><span class="accordion__icon">+</span></div>
+      <div class="accordion__body"><div class="accordion__content">
+        <p><strong>Composition:</strong> 78% Polyamide, 22% Elastane<br><strong>Cup lining:</strong> 100% Polyester spacer foam</p>
+        <ul>
+          <li>Hand wash at 30&deg;C or use lingerie bag in delicates cycle</li>
+          <li>Do not tumble dry</li>
+          <li>Air dry flat, reshape cups while damp</li>
+          <li>Do not iron or bleach</li>
+        </ul>
+      </div></div>
+    </div>
+    <div class="accordion">
+      <div class="accordion__header"><span class="accordion__title">Shipping &amp; Returns</span><span class="accordion__icon">+</span></div>
+      <div class="accordion__body"><div class="accordion__content">
+        <p><strong>Shipping:</strong></p>
+        <ul>
+          <li>Free standard shipping on orders over &euro;75</li>
+          <li>Standard delivery: 3&ndash;5 business days (EU)</li>
+          <li>Express delivery: 1&ndash;2 business days (+&euro;9.95)</li>
+        </ul>
+        <p style="margin-top:12px"><strong>Returns:</strong></p>
+        <ul>
+          <li>30-day hassle-free returns</li>
+          <li>Free return shipping within EU</li>
+          <li>Items must be unworn with tags attached</li>
+          <li>Refund processed within 5 business days</li>
+        </ul>
+      </div></div>
+    </div>
+    <div class="accordion">
+      <div class="accordion__header"><span class="accordion__title">The Craft Behind This Piece</span><span class="accordion__icon">+</span></div>
+      <div class="accordion__body"><div class="accordion__content">
+        <p>This bra is assembled from 80 individual components &mdash; each one precision-cut, sewn, and finished by skilled artisans at our European production facilities.</p>
+        <p style="margin-top:12px">From the yarn selection to the final quality inspection, we control every step of the supply chain. This is how we&rsquo;ve been guaranteeing perfect fit for 140 years.</p>
+        <p style="margin-top:12px"><a href="index.html#heritage">Discover Our Heritage &rarr;</a></p>
+      </div></div>
+    </div>
+  </div>
+
+  <!-- ═══ COMPLETE THE LOOK ═══ -->
+  <div class="cross-sell">
+    <h2 class="cross-sell__title">Complete the Look</h2>
+    <p class="cross-sell__subtitle">Pair it with the matching brief for a seamless set</p>
+
+    <div class="cross-sell__grid">
+      <div class="cross-sell__card">
+        <div class="cross-sell__card-img"><img src="images/softtouch-2.jpg" alt="Matching Brief" loading="lazy"></div>
+        <p class="cross-sell__card-name">Matching Brief</p>
+        <div class="cross-sell__card-swatches">
+          <span class="pdp__swatch active" style="width:16px;height:16px;background:#D4BFB0;"></span>
+          <span class="pdp__swatch" style="width:16px;height:16px;background:#2C2220;"></span>
+        </div>
+        <p class="cross-sell__card-price">&euro;39.00</p>
+        <div class="cross-sell__card-sizes">
+          <button class="cross-sell__size-btn">S</button>
+          <button class="cross-sell__size-btn selected">M</button>
+          <button class="cross-sell__size-btn">L</button>
+          <button class="cross-sell__size-btn">XL</button>
+        </div>
+        <button class="cross-sell__add-btn">+ Add to Cart</button>
+      </div>
+      <div class="cross-sell__card">
+        <div class="cross-sell__card-img"><img src="images/purefeel-2.jpg" alt="Matching Thong" loading="lazy"></div>
+        <p class="cross-sell__card-name">Matching Thong</p>
+        <div class="cross-sell__card-swatches">
+          <span class="pdp__swatch active" style="width:16px;height:16px;background:#D4BFB0;"></span>
+          <span class="pdp__swatch" style="width:16px;height:16px;background:#2C2220;"></span>
+        </div>
+        <p class="cross-sell__card-price">&euro;35.00</p>
+        <div class="cross-sell__card-sizes">
+          <button class="cross-sell__size-btn">S</button>
+          <button class="cross-sell__size-btn">M</button>
+          <button class="cross-sell__size-btn">L</button>
+          <button class="cross-sell__size-btn">XL</button>
+        </div>
+        <button class="cross-sell__add-btn">+ Add to Cart</button>
+      </div>
+    </div>
+
+    <div class="bundle">
+      <p class="bundle__badge">&#127873; Bundle &amp; Save 15%</p>
+      <p class="bundle__items">Silhouette Spacer Bra + Matching Brief</p>
+      <div class="bundle__price-row">
+        <span class="bundle__price-original">&euro;128.00</span>
+        <span class="bundle__price-sale">&euro;108.80</span>
+      </div>
+      <p class="bundle__savings">You save: &euro;19.20</p>
+      <div class="bundle__sizes">
+        <span class="bundle__sizes-label">Brief size:</span>
+        <button class="cross-sell__size-btn">S</button>
+        <button class="cross-sell__size-btn selected">M</button>
+        <button class="cross-sell__size-btn">L</button>
+        <button class="cross-sell__size-btn">XL</button>
+      </div>
+      <button class="bundle__atc">Add Set to Cart</button>
+    </div>
+  </div>
+
+  <!-- ═══ YOU MAY ALSO LOVE ═══ -->
+  <div class="upsell">
+    <div class="upsell__header"><h2 class="upsell__title">You May Also Love</h2></div>
+    <div class="upsell__grid">
+      <div class="upsell__card">
+        <div class="upsell__card-img"><span class="upsell__card-badge">Bestseller</span><img src="images/provence-1.jpg" alt="Provence 3D Spacer" loading="lazy"></div>
+        <p class="upsell__card-collection">Provence</p>
+        <p class="upsell__card-name">Provence 3D Spacer</p>
+        <div class="upsell__card-bottom"><span class="upsell__card-price">&euro;84</span><span class="upsell__card-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</span></div>
+      </div>
+      <div class="upsell__card">
+        <div class="upsell__card-img"><img src="images/millefleurs-2.jpg" alt="Mille Fleurs Lace Bra" loading="lazy"></div>
+        <p class="upsell__card-collection">Mille Fleurs</p>
+        <p class="upsell__card-name">Mille Fleurs Lace Bra</p>
+        <div class="upsell__card-bottom"><span class="upsell__card-price">&euro;94</span><span class="upsell__card-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</span></div>
+      </div>
+      <div class="upsell__card">
+        <div class="upsell__card-img"><img src="images/purefeel-1.jpg" alt="Pure Feeling T-Shirt Bra" loading="lazy"></div>
+        <p class="upsell__card-collection">Pure Feeling</p>
+        <p class="upsell__card-name">Pure Feeling T-Shirt Bra</p>
+        <div class="upsell__card-bottom"><span class="upsell__card-price">&euro;79</span><span class="upsell__card-stars">&#9733;&#9733;&#9733;&#9733;&#9734;</span></div>
+      </div>
+      <div class="upsell__card">
+        <div class="upsell__card-img"><img src="images/blossom-1.jpg" alt="Blossom Soft Cup" loading="lazy"></div>
+        <p class="upsell__card-collection">Blossom</p>
+        <p class="upsell__card-name">Blossom Soft Cup</p>
+        <div class="upsell__card-bottom"><span class="upsell__card-price">&euro;69</span><span class="upsell__card-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ CUSTOMER REVIEWS ═══ -->
+  <section class="reviews" id="reviews">
+    <div class="reviews__header">
+      <div class="reviews__overall">
+        <p class="reviews__overall-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</p>
+        <p class="reviews__overall-text">4.8 out of 5</p>
+        <p class="reviews__overall-count">124 reviews</p>
+      </div>
+      <div class="reviews__bars">
+        <div class="reviews__bar-row"><span class="reviews__bar-label">5&#9733;</span><div class="reviews__bar"><div class="reviews__bar-fill" style="width:89%"></div></div><span class="reviews__bar-pct">89%</span></div>
+        <div class="reviews__bar-row"><span class="reviews__bar-label">4&#9733;</span><div class="reviews__bar"><div class="reviews__bar-fill" style="width:8%"></div></div><span class="reviews__bar-pct">8%</span></div>
+        <div class="reviews__bar-row"><span class="reviews__bar-label">3&#9733;</span><div class="reviews__bar"><div class="reviews__bar-fill" style="width:2%"></div></div><span class="reviews__bar-pct">2%</span></div>
+        <div class="reviews__bar-row"><span class="reviews__bar-label">2&#9733;</span><div class="reviews__bar"><div class="reviews__bar-fill" style="width:1%"></div></div><span class="reviews__bar-pct">1%</span></div>
+        <div class="reviews__bar-row"><span class="reviews__bar-label">1&#9733;</span><div class="reviews__bar"><div class="reviews__bar-fill" style="width:0%"></div></div><span class="reviews__bar-pct">0%</span></div>
+      </div>
+    </div>
+
+    <p style="font-size:10px;letter-spacing:0.12em;text-transform:uppercase;color:var(--muted);margin-bottom:10px;">Fit Feedback:</p>
+    <div class="reviews__fit">
+      <span class="reviews__fit-chip">Runs Small</span>
+      <span class="reviews__fit-chip active">True to Size</span>
+      <span class="reviews__fit-chip">Runs Large</span>
+    </div>
+
+    <div class="reviews__filters">
+      <button class="reviews__filter active">All</button>
+      <button class="reviews__filter">Photos</button>
+      <button class="reviews__filter">5&#9733;</button>
+      <button class="reviews__filter">4&#9733;</button>
+      <button class="reviews__filter">3&#9733;</button>
+    </div>
+
+    <!-- Review 1 -->
+    <div class="review-card">
+      <div class="review-card__top">
+        <span class="review-card__stars">&#9733;&#9733;&#9733;&#9733;&#9733;</span>
+        <span class="review-card__author">Maria K.</span>
+      </div>
+      <p class="review-card__meta">Verified Buyer &middot; 80D &middot; 2 weeks ago</p>
+      <p class="review-card__text">&ldquo;Finally a bra that actually fits. The spacer cups are incredibly comfortable and the shape is perfect under shirts. I ordered my usual size and it was spot on.&rdquo;</p>
+      <div class="review-card__tags">
+        <span>Fit: True to size</span>
+        <span>Recommend: Yes &#10003;</span>
+      </div>
+      <div class="review-card__helpful">
+        Helpful? <button>&#128077; 12</button> <button>&#128078; 0</button>
+      </div>
+    </div>
+
+    <!-- Review 2 -->
+    <div class="review-card">
+      <div class="review-card__top">
+        <span class="review-card__stars">&#9733;&#9733;&#9733;&#9733;&#9733;</span>
+        <span class="review-card__author">Sophie M.</span>
+      </div>
+      <p class="review-card__meta">Verified Buyer &middot; 75D &middot; 1 month ago</p>
+      <p class="review-card__text">&ldquo;The quality is exceptional. You can tell this is European craftsmanship. The straps don&rsquo;t dig in and it gives a beautiful, natural shape.&rdquo;</p>
+      <div class="review-card__tags">
+        <span>Fit: True to size</span>
+        <span>Recommend: Yes &#10003;</span>
+      </div>
+      <div class="review-card__helpful">
+        Helpful? <button>&#128077; 8</button> <button>&#128078; 0</button>
+      </div>
+    </div>
+
+    <!-- Review 3 -->
+    <div class="review-card">
+      <div class="review-card__top">
+        <span class="review-card__stars">&#9733;&#9733;&#9733;&#9733;&#9734;</span>
+        <span class="review-card__author">Anna L.</span>
+      </div>
+      <p class="review-card__meta">Verified Buyer &middot; 85C &middot; 3 weeks ago</p>
+      <p class="review-card__text">&ldquo;Very comfortable for everyday wear. The only reason for 4 stars is I wish there were more color options. The champagne shade is lovely though.&rdquo;</p>
+      <div class="review-card__tags">
+        <span>Fit: True to size</span>
+        <span>Recommend: Yes &#10003;</span>
+      </div>
+      <div class="review-card__helpful">
+        Helpful? <button>&#128077; 5</button> <button>&#128078; 1</button>
+      </div>
+    </div>
+
+    <div class="reviews__actions">
+      <button class="reviews__btn reviews__btn--load">Load More Reviews</button>
+      <button class="reviews__btn reviews__btn--write">Write a Review</button>
+    </div>
+  </section>
+
+  <!-- ═══ RECENTLY VIEWED ═══ -->
+  <div class="recently">
+    <h3 class="recently__title">Recently Viewed</h3>
+    <div class="recently__grid">
+      <div class="recently__card"><div class="recently__card-img"><img src="images/millefleurs-3.jpg" alt="Mille Fleurs" loading="lazy"></div><p class="recently__card-name">Mille Fleurs Full Cup</p><p class="recently__card-price">&euro;94</p></div>
+      <div class="recently__card"><div class="recently__card-img"><img src="images/provence-3.jpg" alt="Provence" loading="lazy"></div><p class="recently__card-name">Provence 3D Spacer</p><p class="recently__card-price">&euro;84</p></div>
+      <div class="recently__card"><div class="recently__card-img"><img src="images/purefeel-1.jpg" alt="Pure Feeling" loading="lazy"></div><p class="recently__card-name">Pure Feeling T-Shirt</p><p class="recently__card-price">&euro;79</p></div>
+    </div>
+  </div>
+
+  <!-- ═══ FOOTER ═══ -->
+  <footer class="footer">
+    <div class="footer__grid">
+      <div><p class="footer__brand-name">Conturelle</p><p class="footer__brand-sub">by Felina</p><p class="footer__brand-tagline">Engineered for the Way You Move. Since 1885.</p></div>
+      <div><p class="footer__col-title">Shop</p><ul class="footer__links"><li><a href="#">Spacer Bras</a></li><li><a href="#">Lace Bras</a></li><li><a href="#">T-Shirt Bras</a></li><li><a href="#">Briefs</a></li><li><a href="#">Complete Sets</a></li><li><a href="#">Sale</a></li></ul></div>
+      <div><p class="footer__col-title">Help</p><ul class="footer__links"><li><a href="#">Size Guide</a></li><li><a href="#">Fit Finder Quiz</a></li><li><a href="#">Shipping</a></li><li><a href="#">Returns</a></li><li><a href="#">Contact Us</a></li><li><a href="#">FAQs</a></li></ul></div>
+      <div><p class="footer__col-title">About</p><ul class="footer__links"><li><a href="#">Our Story</a></li><li><a href="#">140 Years of Heritage</a></li><li><a href="#">Sustainability</a></li><li><a href="#">Press</a></li></ul></div>
+    </div>
+    <div class="footer__trust-bar">Secure Checkout &middot; OEKO-TEX&reg; Certified &middot; Made in Europe</div>
+    <div class="footer__bottom">
+      <p class="footer__copy">&copy; 2026 Conturelle by Felina &mdash; European Lingerie Group</p>
+      <ul class="footer__legal"><li><a href="#">Privacy Policy</a></li><li><a href="#">Terms of Service</a></li><li><a href="#">Imprint</a></li><li><a href="#">Cookie Settings</a></li></ul>
+    </div>
+  </footer>
+
+  <!-- ═══ STICKY ATC BAR (mobile) ═══ -->
+  <div class="sticky-atc" id="stickyAtc">
+    <div class="sticky-atc__info">
+      <p class="sticky-atc__name">Silhouette Spacer</p>
+      <p class="sticky-atc__variant">80D &middot; Champagne</p>
+    </div>
+    <span class="sticky-atc__price" style="margin-right:12px">&euro;62.30</span>
+    <button class="sticky-atc__btn">Add to Cart</button>
+  </div>
+
+  <!-- ═══ CART DRAWER ═══ -->
+  <div class="cart-overlay" id="cartOverlay"></div>
+  <div class="cart-drawer" id="cartDrawer">
+    <div class="cart-drawer__header">
+      <span class="cart-drawer__title">Your Cart (2)</span>
+      <button class="cart-drawer__close" id="cartClose">&times;</button>
+    </div>
+
+    <div class="shipping-progress">
+      <p class="shipping-msg">You&rsquo;re &euro;12.70 away from FREE SHIPPING!</p>
+      <div class="shipping-bar"><div class="shipping-bar-fill" style="width:83%"></div></div>
+      <div class="shipping-amounts"><span>&euro;62.30</span><span>&euro;75.00</span></div>
+    </div>
+
+    <div class="cart-drawer__items">
+      <div class="cart-item">
+        <div class="cart-item__img"><img src="images/swing-1.jpg" alt="Silhouette Spacer"></div>
+        <div class="cart-item__info">
+          <p class="cart-item__name">Silhouette Spacer Bra</p>
+          <p class="cart-item__variant">80D &middot; Champagne</p>
+          <div class="cart-item__price-row">
+            <span class="cart-item__price-original">&euro;89.00</span>
+            <span class="cart-item__price">&euro;62.30</span>
+          </div>
+          <div class="cart-item__qty">
+            <button class="cart-item__qty-btn">&minus;</button>
+            <span class="cart-item__qty-val">1</span>
+            <button class="cart-item__qty-btn">+</button>
+          </div>
+          <button class="cart-item__remove">Remove</button>
+        </div>
+      </div>
+      <div class="cart-item">
+        <div class="cart-item__img"><img src="images/softtouch-2.jpg" alt="Matching Brief"></div>
+        <div class="cart-item__info">
+          <p class="cart-item__name">Matching Brief</p>
+          <p class="cart-item__variant">M &middot; Champagne</p>
+          <div class="cart-item__price-row">
+            <span class="cart-item__price">&euro;39.00</span>
+          </div>
+          <div class="cart-item__qty">
+            <button class="cart-item__qty-btn">&minus;</button>
+            <span class="cart-item__qty-val">1</span>
+            <button class="cart-item__qty-btn">+</button>
+          </div>
+          <button class="cart-item__remove">Remove</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="cart-upsell">
+      <p class="cart-upsell__title">Complete Your Order</p>
+      <div class="cart-upsell__card">
+        <div class="cart-upsell__card-img"><img src="images/purefeel-2.jpg" alt="Matching Thong"></div>
+        <div class="cart-upsell__card-info">
+          <p class="cart-upsell__card-name">Matching Thong</p>
+          <p class="cart-upsell__card-price"><s>&euro;35.00</s> &euro;31.50 (Save 10%)</p>
+          <button class="cart-upsell__card-add">+ Add</button>
+        </div>
+      </div>
+      <div class="cart-upsell__card">
+        <div class="cart-upsell__card-img"><img src="images/provence-1.jpg" alt="Provence"></div>
+        <div class="cart-upsell__card-info">
+          <p class="cart-upsell__card-name">Provence Lace Bra</p>
+          <p class="cart-upsell__card-price">&euro;79.00</p>
+          <button class="cart-upsell__card-add">View Product &rarr;</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="cart-drawer__footer">
+      <div class="cart-summary__row"><span>Subtotal</span><span>&euro;101.30</span></div>
+      <div class="cart-summary__row"><span>Shipping</span><span>Calculated at checkout</span></div>
+      <div class="cart-summary__total"><span>Total</span><span>&euro;101.30</span></div>
+      <p class="cart-summary__bnpl">or 4 &times; &euro;25.33 with Klarna</p>
+      <a href="checkout.html"><button class="cart-checkout-btn">Checkout &mdash; &euro;101.30</button></a>
+      <button class="cart-continue" id="cartContinue">Continue Shopping</button>
+      <p class="cart-trust">&#10003; Free returns &middot; &#128274; Secure &middot; &#10003; Crafted in Europe</p>
+    </div>
+  </div>
+
+  <!-- ═══ JAVASCRIPT ═══ -->
+  <script>
+    (function() {
+      // Announcement bar
+      var bar = document.getElementById('announcementBar');
+      var nav = document.querySelector('.site-nav');
+      bar.querySelector('.announcement-close').addEventListener('click', function() {
+        bar.classList.add('is-hidden');
+        nav.classList.add('no-announcement');
+        document.documentElement.style.setProperty('--announcement-height', '0px');
+      });
+      setInterval(function() {
+        var msgs = bar.querySelectorAll('.announcement-msg');
+        var active = bar.querySelector('.announcement-msg.active');
+        if (!active) return;
+        var idx = [].indexOf.call(msgs, active);
+        active.classList.remove('active');
+        msgs[(idx + 1) % msgs.length].classList.add('active');
+      }, 4000);
+
+      // Thumbnail gallery
+      var thumbs = document.querySelectorAll('.pdp__thumb');
+      var mainImg = document.getElementById('mainImage');
+      thumbs.forEach(function(t) {
+        t.addEventListener('click', function() {
+          thumbs.forEach(function(x) { x.classList.remove('active'); });
+          t.classList.add('active');
+          mainImg.src = t.getAttribute('data-img');
+        });
+      });
+
+      // Swatch selection
+      document.querySelectorAll('.pdp__swatches').forEach(function(group) {
+        group.querySelectorAll('.pdp__swatch').forEach(function(s) {
+          s.addEventListener('click', function() {
+            group.querySelectorAll('.pdp__swatch').forEach(function(x) { x.classList.remove('active'); });
+            s.classList.add('active');
+          });
+        });
+      });
+
+      // Size selection
+      document.querySelectorAll('.pdp__sizes, .cross-sell__card-sizes, .bundle__sizes').forEach(function(group) {
+        group.querySelectorAll('.pdp__size-btn, .cross-sell__size-btn').forEach(function(btn) {
+          btn.addEventListener('click', function() {
+            if (btn.classList.contains('oos')) return;
+            group.querySelectorAll('.pdp__size-btn, .cross-sell__size-btn').forEach(function(x) { x.classList.remove('selected'); });
+            btn.classList.add('selected');
+          });
+        });
+      });
+
+      // Size toggle (EU/UK)
+      document.querySelectorAll('.pdp__size-toggle-btn').forEach(function(btn) {
+        btn.addEventListener('click', function() {
+          document.querySelectorAll('.pdp__size-toggle-btn').forEach(function(x) { x.classList.remove('active'); });
+          btn.classList.add('active');
+        });
+      });
+
+      // Accordions
+      document.querySelectorAll('.accordion__header').forEach(function(header) {
+        header.addEventListener('click', function() {
+          var acc = header.parentElement;
+          var body = acc.querySelector('.accordion__body');
+          var content = acc.querySelector('.accordion__content');
+          if (acc.classList.contains('is-open')) {
+            body.style.maxHeight = '0';
+            acc.classList.remove('is-open');
+          } else {
+            body.style.maxHeight = content.scrollHeight + 'px';
+            acc.classList.add('is-open');
+          }
+        });
+      });
+
+      // Review filters
+      document.querySelectorAll('.reviews__filter').forEach(function(f) {
+        f.addEventListener('click', function() {
+          document.querySelectorAll('.reviews__filter').forEach(function(x) { x.classList.remove('active'); });
+          f.classList.add('active');
+        });
+      });
+
+      // Cart drawer
+      var overlay = document.getElementById('cartOverlay');
+      var drawer = document.getElementById('cartDrawer');
+      function openCart() { overlay.classList.add('is-open'); drawer.classList.add('is-open'); document.body.style.overflow = 'hidden'; }
+      function closeCart() { overlay.classList.remove('is-open'); drawer.classList.remove('is-open'); document.body.style.overflow = ''; }
+      document.getElementById('cartToggle').addEventListener('click', openCart);
+      overlay.addEventListener('click', closeCart);
+      document.getElementById('cartClose').addEventListener('click', closeCart);
+      document.getElementById('cartContinue').addEventListener('click', closeCart);
+
+      // ATC opens cart
+      document.getElementById('mainAtcBtn').addEventListener('click', openCart);
+
+      // Sticky ATC (mobile)
+      var mainAtc = document.getElementById('mainAtcBtn');
+      var stickyAtc = document.getElementById('stickyAtc');
+      if (mainAtc && stickyAtc) {
+        var stickyObs = new IntersectionObserver(function(entries) {
+          entries.forEach(function(e) {
+            stickyAtc.classList.toggle('visible', !e.isIntersecting);
+          });
+        }, { threshold: 0 });
+        stickyObs.observe(mainAtc);
+      }
+    })();
+  </script>
+</body>
+</html>

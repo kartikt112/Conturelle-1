@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Checkout — Conturelle</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600&family=Jost:wght@200;300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --espresso: #2C2220; --warm-white: #FAF7F4; --cream: #F3EDE6;
+    --gold: #C4956A; --gold-hover: #B38559; --champagne: #E8D5C4;
+    --taupe: #6B5B52; --muted: #9B8B82; --border: #E5DDD5;
+    --sale-red: #B5484A; --success: #4A7C59;
+    --serif: 'Cormorant Garamond', Georgia, serif;
+    --sans: 'Jost', 'Helvetica Neue', sans-serif;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: var(--sans); background: var(--warm-white); color: var(--espresso); -webkit-font-smoothing: antialiased; }
+
+  /* Header */
+  .checkout-header { display: flex; align-items: center; justify-content: space-between; padding: 20px 4%; border-bottom: 1px solid var(--border); }
+  .checkout-header__logo { font-family: var(--serif); font-size: 22px; font-weight: 600; color: var(--espresso); letter-spacing: 0.13em; text-transform: uppercase; text-decoration: none; }
+  .checkout-header__sub { font-size: 11px; color: var(--gold); letter-spacing: 0.1em; }
+  .checkout-header__secure { font-size: 11px; color: var(--muted); letter-spacing: 0.08em; }
+
+  /* Layout */
+  .checkout { display: grid; grid-template-columns: 1fr 420px; min-height: calc(100vh - 65px); }
+  .checkout__main { padding: 40px 48px 60px; max-width: 680px; }
+  .checkout__sidebar { background: var(--cream); padding: 40px 32px; border-left: 1px solid var(--border); }
+
+  /* Section titles */
+  .checkout-section { margin-bottom: 36px; }
+  .checkout-section__title { font-size: 10px; letter-spacing: 0.25em; text-transform: uppercase; color: var(--muted); margin-bottom: 16px; padding-bottom: 10px; border-bottom: 1px solid var(--border); }
+
+  /* Express checkout buttons */
+  .express-btns { display: flex; flex-direction: column; gap: 10px; margin-bottom: 28px; }
+  .express-btn { height: 48px; border: 1px solid var(--border); background: #fff; display: flex; align-items: center; justify-content: center; cursor: pointer; font-family: var(--sans); font-size: 13px; font-weight: 500; color: var(--espresso); letter-spacing: 0.05em; transition: border-color 0.2s; }
+  .express-btn:hover { border-color: var(--espresso); }
+  .express-btn--dark { background: var(--espresso); color: #fff; border-color: var(--espresso); }
+  .express-btn--purple { background: #5F259F; color: #fff; border-color: #5F259F; }
+  .express-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+
+  .checkout-or { text-align: center; font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--muted); margin: 24px 0; position: relative; }
+  .checkout-or::before, .checkout-or::after { content: ''; position: absolute; top: 50%; height: 1px; background: var(--border); width: 40%; }
+  .checkout-or::before { left: 0; }
+  .checkout-or::after { right: 0; }
+
+  /* Form */
+  .form-group { margin-bottom: 16px; }
+  .form-label { display: block; font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--taupe); margin-bottom: 6px; }
+  .form-input { width: 100%; height: 48px; padding: 0 16px; border: 1px solid var(--border); background: #fff; font-family: var(--sans); font-size: 13px; color: var(--espresso); outline: none; transition: border-color 0.2s; }
+  .form-input:focus { border-color: var(--gold); }
+  .form-input::placeholder { color: var(--muted); }
+  .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .form-row--3 { grid-template-columns: 1fr 1fr 1fr; }
+
+  .form-checkbox { display: flex; align-items: flex-start; gap: 10px; margin-top: 12px; }
+  .form-checkbox input { margin-top: 3px; accent-color: var(--gold); }
+  .form-checkbox label { font-size: 12px; color: var(--taupe); line-height: 1.5; }
+
+  /* Shipping options */
+  .shipping-option { display: flex; align-items: center; justify-content: space-between; padding: 16px; border: 1px solid var(--border); margin-bottom: 8px; cursor: pointer; transition: border-color 0.2s; }
+  .shipping-option.selected { border-color: var(--gold); background: rgba(196,149,106,0.04); }
+  .shipping-option__left { display: flex; align-items: center; gap: 12px; }
+  .shipping-option__radio { width: 16px; height: 16px; border: 2px solid var(--border); border-radius: 50%; display: flex; align-items: center; justify-content: center; }
+  .shipping-option.selected .shipping-option__radio { border-color: var(--gold); }
+  .shipping-option.selected .shipping-option__radio::after { content: ''; width: 8px; height: 8px; background: var(--gold); border-radius: 50%; }
+  .shipping-option__name { font-size: 13px; color: var(--espresso); }
+  .shipping-option__time { font-size: 10px; color: var(--muted); }
+  .shipping-option__price { font-size: 13px; font-weight: 500; color: var(--espresso); }
+  .shipping-option__price.free { color: var(--success); }
+
+  /* Order bumps */
+  .order-bump { border: 1px solid var(--border); padding: 16px; margin-bottom: 12px; display: flex; gap: 14px; align-items: flex-start; }
+  .order-bump__check { margin-top: 2px; accent-color: var(--gold); width: 16px; height: 16px; cursor: pointer; }
+  .order-bump__img { width: 56px; height: 56px; background: var(--cream); overflow: hidden; flex-shrink: 0; }
+  .order-bump__img img { width: 100%; height: 100%; object-fit: cover; }
+  .order-bump__info { flex: 1; }
+  .order-bump__name { font-size: 13px; font-weight: 500; color: var(--espresso); margin-bottom: 2px; }
+  .order-bump__price { font-size: 12px; color: var(--gold); margin-bottom: 4px; }
+  .order-bump__desc { font-size: 11px; color: var(--taupe); line-height: 1.5; }
+
+  /* Payment */
+  .payment-option { display: flex; align-items: center; gap: 12px; padding: 14px 16px; border: 1px solid var(--border); margin-bottom: 8px; cursor: pointer; }
+  .payment-option.selected { border-color: var(--gold); background: rgba(196,149,106,0.04); }
+  .payment-option__name { font-size: 13px; color: var(--espresso); }
+  .card-fields { padding: 16px; border: 1px solid var(--border); border-top: none; margin-top: -9px; margin-bottom: 8px; }
+
+  /* Discount */
+  .discount-row { display: flex; gap: 0; }
+  .discount-input { flex: 1; height: 44px; padding: 0 14px; border: 1px solid var(--border); border-right: none; font-family: var(--sans); font-size: 12px; color: var(--espresso); outline: none; background: #fff; }
+  .discount-input:focus { border-color: var(--gold); }
+  .discount-btn { height: 44px; padding: 0 20px; background: var(--espresso); color: #fff; border: none; font-size: 10px; letter-spacing: 0.15em; text-transform: uppercase; cursor: pointer; }
+
+  /* Sidebar order summary */
+  .summary-item { display: flex; gap: 14px; margin-bottom: 16px; padding-bottom: 16px; border-bottom: 1px solid var(--border); }
+  .summary-item:last-of-type { border-bottom: none; }
+  .summary-item__img { width: 64px; height: 80px; overflow: hidden; flex-shrink: 0; position: relative; }
+  .summary-item__img img { width: 100%; height: 100%; object-fit: cover; }
+  .summary-item__qty { position: absolute; top: -6px; right: -6px; width: 18px; height: 18px; background: var(--taupe); color: #fff; font-size: 9px; display: flex; align-items: center; justify-content: center; border-radius: 50%; }
+  .summary-item__info { flex: 1; }
+  .summary-item__name { font-family: var(--serif); font-size: 14px; color: var(--espresso); margin-bottom: 2px; }
+  .summary-item__variant { font-size: 10px; color: var(--muted); }
+  .summary-item__price { font-size: 13px; color: var(--espresso); text-align: right; }
+  .summary-item__price-original { font-size: 11px; color: var(--muted); text-decoration: line-through; display: block; }
+
+  .summary-row { display: flex; justify-content: space-between; font-size: 13px; color: var(--taupe); margin-bottom: 8px; }
+  .summary-total { display: flex; justify-content: space-between; font-size: 18px; font-weight: 500; color: var(--espresso); padding-top: 14px; border-top: 1px solid var(--border); margin-top: 12px; margin-bottom: 4px; }
+  .summary-bnpl { font-size: 10px; color: var(--muted); margin-bottom: 20px; }
+
+  /* Trust */
+  .trust-signals { margin-top: 24px; padding-top: 20px; border-top: 1px solid var(--border); }
+  .trust-item { display: flex; align-items: center; gap: 8px; font-size: 11px; color: var(--taupe); margin-bottom: 8px; }
+  .trust-icon { color: var(--gold); font-size: 13px; }
+  .payment-logos { display: flex; gap: 12px; margin-top: 16px; flex-wrap: wrap; }
+  .payment-logo { padding: 6px 12px; border: 1px solid var(--border); font-size: 10px; font-weight: 500; color: var(--taupe); letter-spacing: 0.06em; }
+
+  /* Complete button */
+  .complete-btn { width: 100%; height: 56px; background: var(--gold); color: #fff; border: none; font-family: var(--sans); font-size: 13px; font-weight: 500; letter-spacing: 0.18em; text-transform: uppercase; cursor: pointer; transition: background 0.3s; margin-top: 24px; }
+  .complete-btn:hover { background: var(--gold-hover); }
+  .legal-text { font-size: 10px; color: var(--muted); line-height: 1.6; margin-top: 12px; }
+  .legal-text a { color: var(--gold); text-decoration: none; }
+
+  /* Responsive */
+  @media (max-width: 900px) {
+    .checkout { grid-template-columns: 1fr; }
+    .checkout__sidebar { border-left: none; border-top: 1px solid var(--border); order: -1; padding: 24px 5%; }
+    .checkout__main { padding: 24px 5% 60px; max-width: none; }
+    .form-row { grid-template-columns: 1fr; }
+    .form-row--3 { grid-template-columns: 1fr 1fr; }
+  }
+</style>
+</head>
+<body>
+
+  <!-- Header -->
+  <header class="checkout-header">
+    <div>
+      <a href="index.html" class="checkout-header__logo">Conturelle</a>
+      <span class="checkout-header__sub"> by Felina</span>
+    </div>
+    <span class="checkout-header__secure">&#128274; Secure Checkout</span>
+  </header>
+
+  <div class="checkout">
+    <!-- Main form -->
+    <div class="checkout__main">
+
+      <!-- Express Checkout -->
+      <div class="checkout-section">
+        <p class="checkout-section__title">Express Checkout</p>
+        <div class="express-btns">
+          <button class="express-btn express-btn--dark">Shop Pay</button>
+          <div class="express-row">
+            <button class="express-btn">Google Pay</button>
+            <button class="express-btn">Apple Pay</button>
+          </div>
+          <button class="express-btn express-btn--purple">Klarna</button>
+        </div>
+      </div>
+
+      <p class="checkout-or">or</p>
+
+      <!-- Contact -->
+      <div class="checkout-section">
+        <p class="checkout-section__title">Contact</p>
+        <div class="form-group">
+          <label class="form-label">Email</label>
+          <input type="email" class="form-input" value="sophie.mueller@email.de" placeholder="you@email.com">
+        </div>
+        <div class="form-checkbox">
+          <input type="checkbox" id="newsletter" checked>
+          <label for="newsletter">Email me with news and offers from Conturelle</label>
+        </div>
+      </div>
+
+      <!-- Shipping Address -->
+      <div class="checkout-section">
+        <p class="checkout-section__title">Shipping Address</p>
+        <div class="form-row" style="margin-bottom:12px">
+          <div class="form-group"><label class="form-label">First Name</label><input class="form-input" value="Sophie"></div>
+          <div class="form-group"><label class="form-label">Last Name</label><input class="form-input" value="M&uuml;ller"></div>
+        </div>
+        <div class="form-group"><label class="form-label">Address</label><input class="form-input" value="Friedrichstra&szlig;e 42"></div>
+        <div class="form-group"><input class="form-input" placeholder="Apartment, suite, etc. (optional)"></div>
+        <div class="form-row" style="margin-bottom:12px">
+          <div class="form-group"><label class="form-label">City</label><input class="form-input" value="Berlin"></div>
+          <div class="form-group"><label class="form-label">Postal Code</label><input class="form-input" value="10117"></div>
+        </div>
+        <div class="form-group"><label class="form-label">Country</label><input class="form-input" value="Germany"></div>
+        <div class="form-group"><label class="form-label">Phone (optional)</label><input class="form-input" value="+49 170 1234567" placeholder="+49..."></div>
+      </div>
+
+      <!-- Shipping Method -->
+      <div class="checkout-section">
+        <p class="checkout-section__title">Shipping Method</p>
+        <div class="shipping-option selected" onclick="selectShipping(this)">
+          <div class="shipping-option__left">
+            <div class="shipping-option__radio"></div>
+            <div><p class="shipping-option__name">Standard Shipping</p><p class="shipping-option__time">3&ndash;5 business days</p></div>
+          </div>
+          <span class="shipping-option__price free">FREE</span>
+        </div>
+        <div class="shipping-option" onclick="selectShipping(this)">
+          <div class="shipping-option__left">
+            <div class="shipping-option__radio"></div>
+            <div><p class="shipping-option__name">Express Shipping</p><p class="shipping-option__time">1&ndash;2 business days</p></div>
+          </div>
+          <span class="shipping-option__price">&euro;9.95</span>
+        </div>
+      </div>
+
+      <!-- Order Bumps -->
+      <div class="checkout-section">
+        <p class="checkout-section__title">Add to Your Order</p>
+        <div class="order-bump">
+          <input type="checkbox" class="order-bump__check">
+          <div class="order-bump__img"><img src="images/softtouch-1.jpg" alt="Lingerie Wash Bag"></div>
+          <div class="order-bump__info">
+            <p class="order-bump__name">Lingerie Wash Bag</p>
+            <p class="order-bump__price">&euro;4.95</p>
+            <p class="order-bump__desc">Protect your investment. Extend the life of your Conturelle with our premium mesh wash bag.</p>
+          </div>
+        </div>
+        <div class="order-bump">
+          <input type="checkbox" class="order-bump__check">
+          <div class="order-bump__img"><img src="images/blossom-1.jpg" alt="Gift Wrapping"></div>
+          <div class="order-bump__info">
+            <p class="order-bump__name">Gift Wrapping</p>
+            <p class="order-bump__price">&euro;6.95</p>
+            <p class="order-bump__desc">Premium gift box with ribbon and personalized note card.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Payment -->
+      <div class="checkout-section">
+        <p class="checkout-section__title">Payment</p>
+        <div class="payment-option selected" onclick="selectPayment(this)">
+          <div class="shipping-option__radio"></div>
+          <span class="payment-option__name">Credit Card</span>
+        </div>
+        <div class="card-fields">
+          <div class="form-group"><input class="form-input" placeholder="Card number"></div>
+          <div class="form-row">
+            <div class="form-group"><input class="form-input" placeholder="MM / YY"></div>
+            <div class="form-group"><input class="form-input" placeholder="CVV"></div>
+          </div>
+        </div>
+        <div class="payment-option" onclick="selectPayment(this)">
+          <div class="shipping-option__radio"></div>
+          <span class="payment-option__name">Klarna &mdash; Pay in 4</span>
+        </div>
+        <div class="payment-option" onclick="selectPayment(this)">
+          <div class="shipping-option__radio"></div>
+          <span class="payment-option__name">PayPal</span>
+        </div>
+      </div>
+
+      <!-- Discount -->
+      <div class="checkout-section">
+        <p class="checkout-section__title">Discount Code</p>
+        <div class="discount-row">
+          <input class="discount-input" placeholder="Enter code">
+          <button class="discount-btn">Apply</button>
+        </div>
+      </div>
+
+      <!-- Complete Order -->
+      <button class="complete-btn" onclick="window.location.href='thankyou.html'">Complete Order</button>
+      <p class="legal-text">By placing this order, you agree to our <a href="#">Terms of Service</a> and <a href="#">Privacy Policy</a>.</p>
+
+    </div>
+
+    <!-- Sidebar -->
+    <div class="checkout__sidebar">
+      <p class="checkout-section__title">Order Summary</p>
+
+      <div class="summary-item">
+        <div class="summary-item__img">
+          <img src="images/swing-1.jpg" alt="Silhouette Spacer Bra">
+          <span class="summary-item__qty">1</span>
+        </div>
+        <div class="summary-item__info">
+          <p class="summary-item__name">Silhouette Spacer Bra</p>
+          <p class="summary-item__variant">80D &middot; Champagne</p>
+        </div>
+        <div class="summary-item__price">
+          <span class="summary-item__price-original">&euro;89.00</span>
+          &euro;62.30
+        </div>
+      </div>
+
+      <div class="summary-item">
+        <div class="summary-item__img">
+          <img src="images/softtouch-2.jpg" alt="Matching Brief">
+          <span class="summary-item__qty">1</span>
+        </div>
+        <div class="summary-item__info">
+          <p class="summary-item__name">Matching Brief</p>
+          <p class="summary-item__variant">M &middot; Champagne</p>
+        </div>
+        <div class="summary-item__price">&euro;39.00</div>
+      </div>
+
+      <div class="summary-row"><span>Subtotal</span><span>&euro;101.30</span></div>
+      <div class="summary-row"><span>Shipping</span><span style="color:var(--success)">FREE</span></div>
+      <div class="summary-total"><span>Total</span><span>&euro;101.30</span></div>
+      <p class="summary-bnpl">or 4 &times; &euro;25.33 with Klarna</p>
+
+      <div class="trust-signals">
+        <div class="trust-item"><span class="trust-icon">&#128274;</span> 256-bit SSL Encryption</div>
+        <div class="trust-item"><span class="trust-icon">&#10003;</span> 30-Day Money-Back Guarantee</div>
+        <div class="trust-item"><span class="trust-icon">&#10003;</span> Secure Payment Processing</div>
+        <div class="trust-item"><span class="trust-icon">&#127466;&#127482;</span> Made in Europe</div>
+        <div class="payment-logos">
+          <span class="payment-logo">Visa</span>
+          <span class="payment-logo">MC</span>
+          <span class="payment-logo">Amex</span>
+          <span class="payment-logo">PayPal</span>
+          <span class="payment-logo">Klarna</span>
+          <span class="payment-logo">Apple Pay</span>
+          <span class="payment-logo">G Pay</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function selectShipping(el) {
+      document.querySelectorAll('.shipping-option').forEach(function(o) { o.classList.remove('selected'); });
+      el.classList.add('selected');
+    }
+    function selectPayment(el) {
+      document.querySelectorAll('.payment-option').forEach(function(o) { o.classList.remove('selected'); });
+      el.classList.add('selected');
+    }
+  </script>
+</body>
+</html>
